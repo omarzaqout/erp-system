@@ -1,0 +1,108 @@
+<div class="coa-container">
+    <!-- SAP-style Drawers (Categories) -->
+    <div class="coa-drawers">
+        <button *ngFor="let drawer of drawers" class="drawer-btn" [class.active]="activeGroupMask === drawer.id"
+            (click)="setActiveDrawer(drawer.id)">
+            <span class="drawer-icon">
+                <i [ngClass]="drawer.icon"></i>
+            </span>
+            <span class="drawer-label">{{ drawer.name | translate }}</span>
+        </button>
+    </div>
+
+    <!-- Chart of Accounts Content (Tree Structure) -->
+    <div class="coa-content shadow-sm">
+        <div class="card border-0">
+            <div class="card-header bg-white py-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="header-info">
+                        <h5 class="mb-0 fw-bold text-primary">{{ getActiveDrawerName() | translate }}</h5>
+                        <small class="text-muted">{{ 'OACT - G/L Accounts Table (SAP Logic)' | translate }}</small>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-outline-success btn-sm me-2" (click)="exportToCSV()">
+                            <i class="fas fa-file-csv me-1"></i> {{ 'Export' | translate }}
+                        </button>
+                        <button class="btn btn-primary btn-sm" (click)="addAccount()">
+                            <i class="fas fa-plus"></i> {{ 'Add Account' | translate }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-bar-wrapper">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-start-0 ps-0"
+                            [placeholder]="'Search by account name or code...' | translate"
+                            (input)="onSearchChange($any($event.target).value)">
+                    </div>
+                    <div class="search-results-info mt-1" *ngIf="searchTerm">
+                        <small class="text-primary italic">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Showing branches matching "{{ searchTerm }}"
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body coa-tree-body">
+                <!-- Recursive Tree Start -->
+                <div class="tree-root">
+                    <ng-container
+                        *ngTemplateOutlet="nodeTemplate; context: { $implicit: (treeAccounts$ | async) }"></ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recursive Template for Tree Nodes -->
+<ng-template #nodeTemplate let-nodes>
+    <ul class="tree-list">
+        <li *ngFor="let node of nodes" class="tree-node" [class.is-title]="node.Postable === 'N'">
+            <div class="node-content" [class.expanded]="isExpanded(node.AcctCode)"
+                (click)="node.Postable === 'N' ? toggleNode(node.AcctCode) : null">
+
+                <div class="node-main">
+                    <span class="node-toggle" *ngIf="node.children && node.children.length > 0"
+                        (click)="toggleNode(node.AcctCode, $event)">
+                        <i class="fas" [ngClass]="isExpanded(node.AcctCode) ? 'fa-minus-square' : 'fa-plus-square'"></i>
+                    </span>
+                    <span class="node-toggle-placeholder" *ngIf="!node.children || node.children.length === 0"></span>
+
+                    <span class="node-icon">
+                        <i class="fas"
+                            [ngClass]="node.Postable === 'N' ? (isExpanded(node.AcctCode) ? 'fa-folder-open' : 'fa-folder') : 'fa-file-invoice'"></i>
+                    </span>
+
+                    <span class="node-code">{{ node.AcctCode }}</span>
+                    <span class="node-name">{{ node.AcctName }}</span>
+                </div>
+
+                <div class="node-details">
+                    <span class="node-balance" [class.negative]="node.CurrTotal < 0">
+                        {{ node.CurrTotal | erpCurrency }}
+                    </span>
+                    <div class="node-actions ms-3">
+                        <button class="btn btn-link btn-xs text-primary p-0 me-2" (click)="editAccount(node, $event)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-link btn-xs text-danger p-0"
+                            (click)="deleteAccount(node.AcctCode, $event)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recursion -->
+            <div class="node-children" *ngIf="node.children && node.children.length > 0"
+                [hidden]="!isExpanded(node.AcctCode)">
+                <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node.children }"></ng-container>
+            </div>
+        </li>
+    </ul>
+</ng-template>

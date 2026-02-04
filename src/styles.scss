@@ -1,0 +1,714 @@
+// ERP System Global Styles
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+// Color Variables
+:root {
+  --primary-blue: #0070C0;
+  --dark-blue: #0058A0;
+  --light-blue: #E6F2FA;
+  --accent-orange: #FF6B35;
+  --success-green: #28A745;
+  --warning-yellow: #FFC107;
+  --danger-red: #DC3545;
+  --text-dark: #2D3748;
+  --text-light: #718096;
+  --background: #F7FAFC;
+  --white: #FFFFFF;
+  --border: #E2E8F0;
+  --sidebar-width: 260px;
+  --sidebar-collapsed: 70px;
+  --header-height: 70px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+// Scrollbar Styling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-light);
+}
+
+// Card Styles
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  background: var(--white);
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+}
+
+.card-header {
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem;
+  font-weight: 600;
+}
+
+// Button Styles
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 0.625rem 1.25rem;
+  transition: all 0.3s ease;
+
+  &.btn-primary {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+
+    &:hover {
+      background-color: var(--dark-blue);
+      border-color: var(--dark-blue);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 112, 192, 0.3);
+    }
+  }
+
+  &.btn-outline-primary {
+    color: var(--primary-blue);
+    border-color: var(--primary-blue);
+
+    &:hover {
+      background-color: var(--primary-blue);
+      color: var(--white);
+    }
+  }
+
+  &.btn-success {
+    background-color: var(--success-green);
+    border-color: var(--success-green);
+  }
+
+  &.btn-warning {
+    background-color: var(--warning-yellow);
+    border-color: var(--warning-yellow);
+    color: var(--text-dark);
+  }
+
+  &.btn-danger {
+    background-color: var(--danger-red);
+    border-color: var(--danger-red);
+  }
+}
+
+// Form Styles
+.form-control {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 0.625rem 1rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(0, 112, 192, 0.1);
+  }
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+// Table Styles
+.table {
+  th {
+    font-weight: 600;
+    color: var(--text-dark);
+    border-top: none;
+    background-color: var(--background);
+  }
+
+  td {
+    vertical-align: middle;
+    color: var(--text-light);
+  }
+
+  &.table-hover tbody tr:hover {
+    background-color: var(--light-blue);
+  }
+}
+
+// Badge Styles
+.badge {
+  padding: 0.5em 0.75em;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.75rem;
+
+  &.bg-success {
+    background-color: var(--success-green) !important;
+  }
+
+  &.bg-warning {
+    background-color: var(--warning-yellow) !important;
+    color: var(--text-dark);
+  }
+
+  &.bg-danger {
+    background-color: var(--danger-red) !important;
+  }
+
+  &.bg-primary {
+    background-color: var(--primary-blue) !important;
+  }
+}
+
+// Animation Classes
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Status Indicators
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  &.status-active::before {
+    background-color: var(--success-green);
+  }
+
+  &.status-pending::before {
+    background-color: var(--warning-yellow);
+  }
+
+  &.status-inactive::before {
+    background-color: var(--danger-red);
+  }
+}
+
+// Chart Container
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+// Page Header
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0;
+  }
+
+  .breadcrumb {
+    margin-bottom: 0;
+    background: transparent;
+    padding: 0;
+
+    a {
+      color: var(--text-light);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--primary-blue);
+      }
+    }
+  }
+}
+
+// Stats Card
+.stat-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: var(--white);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+
+    &.icon-primary {
+      background-color: var(--light-blue);
+      color: var(--primary-blue);
+    }
+
+    &.icon-success {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--success-green);
+    }
+
+    &.icon-warning {
+      background-color: rgba(255, 193, 7, 0.1);
+      color: var(--warning-yellow);
+    }
+
+    &.icon-danger {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--danger-red);
+    }
+  }
+
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    color: var(--text-light);
+    font-size: 0.875rem;
+  }
+
+  .stat-change {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+
+    &.positive {
+      color: var(--success-green);
+    }
+
+    &.negative {
+      color: var(--danger-red);
+    }
+  }
+}
+
+// Main Layout
+.main-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-inline-start: var(--sidebar-width);
+  padding-top: var(--header-height);
+  transition: margin-inline-start 0.3s ease;
+
+  &.sidebar-collapsed {
+    margin-inline-start: var(--sidebar-collapsed);
+  }
+}
+
+.content-area {
+  padding: 1.5rem;
+}
+
+// RTL specific overrides for global elements
+[dir='rtl'] {
+  body {
+    font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+  }
+
+  .sidebar {
+    left: auto !important;
+    right: 0 !important;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    margin-right: var(--sidebar-width) !important;
+
+    &.sidebar-collapsed {
+      margin-right: var(--sidebar-collapsed) !important;
+    }
+  }
+
+  .header {
+    left: 0 !important;
+    right: var(--sidebar-width) !important;
+
+    @media (max-width: 991px) {
+      right: var(--sidebar-collapsed) !important;
+    }
+  }
+
+  // Bootstrap Utility RTL Fixes
+  .me-1 {
+    margin-right: 0 !important;
+    margin-left: 0.25rem !important;
+  }
+
+  .me-2 {
+    margin-right: 0 !important;
+    margin-left: 0.5rem !important;
+  }
+
+  .me-3 {
+    margin-right: 0 !important;
+    margin-left: 1rem !important;
+  }
+
+  .me-auto {
+    margin-right: 0 !important;
+    margin-left: auto !important;
+  }
+
+  .ms-1 {
+    margin-left: 0 !important;
+    margin-right: 0.25rem !important;
+  }
+
+  .ms-2 {
+    margin-left: 0 !important;
+    margin-right: 0.5rem !important;
+  }
+
+  .ms-3 {
+    margin-left: 0 !important;
+    margin-right: 1rem !important;
+  }
+
+  .ms-auto {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+  }
+
+  .text-start {
+    text-align: right !important;
+  }
+
+  .text-end {
+    text-align: left !important;
+  }
+
+  .border-start {
+    border-left: none !important;
+    border-right: 1px solid var(--border) !important;
+  }
+
+  .border-end {
+    border-right: none !important;
+    border-left: 1px solid var(--border) !important;
+  }
+}
+
+// Responsive
+@media (max-width: 991px) {
+  .main-content {
+    margin-inline-start: var(--sidebar-collapsed);
+  }
+
+  .sidebar {
+    width: var(--sidebar-collapsed);
+    inset-inline-start: 0;
+
+    .sidebar-text {
+      display: none;
+    }
+
+    .sidebar-header {
+      justify-content: center;
+
+      .logo-text {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-inline-start: 0;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    inset-inline-start: 0;
+
+    [dir='rtl'] & {
+      transform: translateX(100%);
+    }
+
+    &.show {
+      transform: translateX(0);
+      width: var(--sidebar-width);
+    }
+  }
+
+  .stat-card {
+    margin-bottom: 1rem;
+  }
+}
+
+// Print Styles
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-only,
+  .print-only * {
+    visibility: visible;
+  }
+
+  .print-only {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+    color: #000;
+    background: #fff;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+.receipt-container {
+  width: 300px;
+  margin: 0 auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+
+  .receipt-header {
+    text-align: center;
+    border-bottom: 1px dashed #000;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+  .receipt-items {
+    width: 100%;
+    margin-bottom: 10px;
+
+    th {
+      text-align: left;
+    }
+
+    .item-row td {
+      padding: 4px 0;
+    }
+
+    .text-end {
+      text-align: right;
+    }
+  }
+
+  .receipt-footer {
+    border-top: 1px dashed #000;
+    padding-top: 10px;
+
+    .total-row {
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+}
+
+// POS Barcode Scanner Indicator
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+
+  &.green {
+    background-color: #28a745;
+  }
+
+  &.grey {
+    background-color: #6c757d;
+  }
+
+  &.blue {
+    background-color: #007bff;
+  }
+
+  &.red {
+    background-color: #dc3545;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: inherit;
+    border-radius: 50%;
+    z-index: -1;
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  70% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+// POS Custom Styles
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.payment-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+
+  &.active {
+    border-color: var(--primary-color) !important;
+    background-color: var(--primary-light);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+    i {
+      color: var(--primary-color);
+    }
+  }
+
+  &:hover:not(.active) {
+    background-color: #f8f9fa;
+  }
+}
+
+.receipt-table {
+  width: 100%;
+  font-size: 0.8rem;
+  margin: 10px 0;
+
+  th {
+    border-bottom: 1px dashed #ccc;
+    padding: 5px 0;
+  }
+
+  td {
+    padding: 3px 0;
+  }
+}
+
+// POS Customer Selection Dropdown
+.customer-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 1000;
+  margin-top: 5px;
+  max-height: 250px;
+  overflow-y: auto;
+
+  .customer-item {
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid #eee;
+
+    &:hover {
+      background-color: var(--primary-light);
+    }
+  }
+}

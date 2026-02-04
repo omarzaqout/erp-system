@@ -1,0 +1,17 @@
+.product-card {
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.product-card:active {
+    transform: scale(0.98);
+}
+
+.category-tags::-webkit-scrollbar {
+    height: 4px;
+}
+
+.category-tags::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}

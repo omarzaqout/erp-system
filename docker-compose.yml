@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  erp-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: erp-system-frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - erp-network
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add backend service here when ready
+  # erp-backend:
+  #   image: node:18-alpine
+  #   container_name: erp-system-backend
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./backend:/app
+  #   working_dir: /app
+  #   command: npm start
+  #   networks:
+  #     - erp-network
+
+  # Optional: Add database service here when ready
+  # erp-database:
+  #   image: postgres:15-alpine
+  #   container_name: erp-system-database
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_DB=erp_system
+  #     - POSTGRES_USER=erp_user
+  #     - POSTGRES_PASSWORD=erp_password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - erp-network
+
+networks:
+  erp-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data:

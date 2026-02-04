@@ -1,0 +1,55 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+    <div class="sidebar-header">
+        <div class="logo">
+            <i class="fas fa-cubes"></i>
+            <span class="logo-text">ERP System</span>
+        </div>
+        <button class="toggle-btn" (click)="toggleSidebar()">
+            <i class="fas" [class.fa-chevron-left]="!isCollapsed" [class.fa-chevron-right]="isCollapsed"></i>
+        </button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <ul class="nav-list">
+            <li class="nav-item-wrapper" *ngFor="let item of menuItems" [class.has-children]="item.children">
+                <!-- Main Link / Sub-menu Toggle -->
+                <a class="nav-link" [routerLink]="item.children ? null : item.route" routerLinkActive="active"
+                    (click)="toggleSubMenu(item, $event)" [appTooltip]="isCollapsed ? (item.label | translate) : ''"
+                    tooltipPosition="right">
+                    <i [class]="item.icon"></i>
+                    <span class="nav-text" *ngIf="!isCollapsed">{{ item.label | translate }}</span>
+                    <span class="badge bg-danger" *ngIf="item.badge && !isCollapsed">{{ item.badge }}</span>
+
+                    <!-- Expand Icon -->
+                    <i class="fas dropdown-icon" *ngIf="item.children && !isCollapsed"
+                        [class.fa-chevron-down]="isExpanded(item)" [class.fa-chevron-right]="!isExpanded(item)"></i>
+                </a>
+
+                <!-- Sub-menu Items -->
+                <ul class="sub-nav-list" *ngIf="item.children && isExpanded(item) && !isCollapsed">
+                    <li *ngFor="let child of item.children" class="sub-nav-item">
+                        <a class="sub-nav-link" [routerLink]="child.route" routerLinkActive="active">
+                            <i [class]="child.icon"></i>
+                            <span class="sub-nav-text">{{ child.label | translate }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="user-info" *ngIf="!isCollapsed">
+            <img [src]="userAvatar" alt="User" class="user-avatar">
+            <div class="user-details">
+                <div class="user-name">{{ userName }}</div>
+                <div class="user-role">{{ userRole }}</div>
+            </div>
+        </div>
+        <button class="logout-btn" (click)="logout()" [appTooltip]="isCollapsed ? ('Logout' | translate) : ''"
+            tooltipPosition="right">
+            <i class="fas fa-sign-out-alt"></i>
+            <span *ngIf="!isCollapsed">{{ 'Logout' | translate }}</span>
+        </button>
+    </div>
+</aside>

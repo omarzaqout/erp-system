@@ -1,0 +1,102 @@
+<header class="header">
+    <div class="header-left">
+        <button class="menu-toggle" (click)="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="breadcrumb">
+            <span *ngFor="let item of breadcrumbs; let last = last" [class.active]="last">
+                {{ item | translate }}
+                <i *ngIf="!last" class="fas fa-chevron-right"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <!-- Search -->
+        <div class="search-box" [class.active]="showSearch">
+            <button class="search-toggle" (click)="toggleSearch()">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="search-input" *ngIf="showSearch">
+                <input type="text" [placeholder]="'Search' | translate" [(ngModel)]="searchQuery"
+                    (keyup.enter)="onSearch()">
+                <button class="close-search" (click)="toggleSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="notifications" appClickOutside (appClickOutside)="showNotifications = false">
+            <button class="notification-btn" (click)="toggleNotifications()">
+                <i class="fas fa-bell"></i>
+                <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+            </button>
+
+            <div class="notification-dropdown" *ngIf="showNotifications">
+                <div class="notification-header">
+                    <h6>{{ 'Notifications' | translate }}</h6>
+                    <button class="mark-all-read" (click)="markAllRead()">{{ 'Mark all read' | translate }}</button>
+                </div>
+
+                <div class="notification-list">
+                    <div class="notification-item" *ngFor="let notification of notifications"
+                        [class.unread]="!notification.read" (click)="markAsRead(notification.id)">
+                        <div class="notification-icon" [ngClass]="'icon-' + notification.type">
+                            <i [class]="getNotificationIcon(notification.type)"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">{{ notification.title | translate }}</div>
+                            <div class="notification-message">{{ notification.message | translate }}</div>
+                            <div class="notification-time">{{ notification.timestamp | erpDate:'datetime' }}</div>
+                        </div>
+                    </div>
+
+                    <div class="notification-empty" *ngIf="notifications.length === 0">
+                        <i class="fas fa-bell-slash"></i>
+                        <p>{{ 'No notifications' | translate }}</p>
+                    </div>
+                </div>
+
+                <div class="notification-footer">
+                    <a routerLink="/notifications">{{ 'View All' | translate }}</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Menu -->
+        <div class="user-menu" appClickOutside (appClickOutside)="showUserMenu = false">
+            <button class="user-btn" (click)="toggleUserMenu()">
+                <img [src]="userAvatar" alt="User" class="user-avatar">
+                <span class="user-name">{{ userName }}</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+
+            <div class="user-dropdown" *ngIf="showUserMenu">
+                <div class="user-dropdown-header">
+                    <img [src]="userAvatar" alt="User" class="user-avatar-large">
+                    <div class="user-info">
+                        <div class="user-name">{{ userName }}</div>
+                        <div class="user-email">{{ userEmail }}</div>
+                    </div>
+                </div>
+
+                <div class="user-dropdown-menu">
+                    <a routerLink="/profile" class="dropdown-item">
+                        <i class="fas fa-user"></i>
+                        {{ 'Profile' | translate }}
+                    </a>
+                    <a routerLink="/settings" class="dropdown-item">
+                        <i class="fas fa-cog"></i>
+                        {{ 'Settings' | translate }}
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a (click)="logout()" class="dropdown-item text-danger">
+                        <i class="fas fa-sign-out-alt"></i>
+                        {{ 'Logout' | translate }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

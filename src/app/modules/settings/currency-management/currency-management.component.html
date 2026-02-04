@@ -1,0 +1,190 @@
+<div class="currency-management-container">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h3 class="mb-1"><i class="fas fa-coins me-2 text-primary"></i>{{ 'Currency Management' | translate }}
+                </h3>
+                <p class="text-muted small mb-0">{{ 'OCRN - Currency Table & ORTT - Exchange Rates' | translate }}</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-success btn-sm" (click)="exportCurrencies()">
+                    <i class="fas fa-file-csv me-1"></i> {{ 'Export' | translate }}
+                </button>
+                <button class="btn btn-primary btn-sm" (click)="addCurrency()">
+                    <i class="fas fa-plus me-1"></i> {{ 'Add Currency' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'currencies'" (click)="setActiveTab('currencies')">
+                <i class="fas fa-money-bill-wave me-2"></i>{{ 'Currencies (OCRN)' | translate }}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'rates'" (click)="setActiveTab('rates')">
+                <i class="fas fa-chart-line me-2"></i>{{ 'Exchange Rates (ORTT)' | translate }}
+            </a>
+        </li>
+    </ul>
+
+    <!-- Currencies Tab (OCRN) -->
+    <div *ngIf="activeTab === 'currencies'" class="currencies-tab">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 100px;">{{ 'Code' | translate }}</th>
+                                <th>{{ 'Currency Name' | translate }}</th>
+                                <th style="width: 80px;" class="text-center">{{ 'Symbol' | translate }}</th>
+                                <th style="width: 120px;" class="text-end">{{ 'Rate' | translate }}</th>
+                                <th style="width: 100px;" class="text-center">{{ 'Status' | translate }}</th>
+                                <th style="width: 120px;">{{ 'Last Updated' | translate }}</th>
+                                <th style="width: 200px;" class="text-end">{{ 'Actions' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let currency of currencies">
+                                <td>
+                                    <span class="badge bg-primary fw-bold">{{ currency.CurrCode }}</span>
+                                    <span class="badge bg-success ms-1"
+                                        *ngIf="currency.CurrCode === baseCurrency">BASE</span>
+                                </td>
+                                <td class="fw-medium">{{ currency.CurrName }}</td>
+                                <td class="text-center fs-5">{{ currency.DocCurrCod }}</td>
+                                <td class="text-end font-monospace">{{ currency.Rate | number:'1.2-4' }}</td>
+                                <td class="text-center">
+                                    <span class="badge" [class.bg-success]="currency.Locked === 'N'"
+                                        [class.bg-secondary]="currency.Locked === 'Y'">
+                                        {{ currency.Locked === 'N' ? 'Active' : 'Locked' }}
+                                    </span>
+                                </td>
+                                <td class="text-muted small">{{ currency.UserDate | date:'short' }}</td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-info" (click)="viewRateHistory(currency)"
+                                            title="View Rate History">
+                                            <i class="fas fa-history"></i>
+                                        </button>
+                                        <button class="btn btn-outline-primary" (click)="editCurrency(currency)"
+                                            title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn" [class.btn-outline-warning]="currency.Locked === 'N'"
+                                            [class.btn-outline-success]="currency.Locked === 'Y'"
+                                            (click)="toggleLock(currency)" title="Toggle Lock">
+                                            <i class="fas" [class.fa-lock]="currency.Locked === 'Y'"
+                                                [class.fa-unlock]="currency.Locked === 'N'"></i>
+                                        </button>
+                                        <button class="btn btn-outline-success"
+                                            *ngIf="currency.CurrCode !== baseCurrency"
+                                            (click)="setAsBase(currency.CurrCode)" title="Set as Base">
+                                            <i class="fas fa-star"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger"
+                                            *ngIf="currency.CurrCode !== baseCurrency"
+                                            (click)="deleteCurrency(currency.CurrCode)" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Base Currency:</strong> {{ baseCurrency }} - All exchange rates are relative to this currency.
+        </div>
+    </div>
+
+    <!-- Exchange Rates Tab (ORTT) -->
+    <div *ngIf="activeTab === 'rates'" class="rates-tab">
+        <div class="row">
+            <!-- Currency Selection -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0"><i class="fas fa-list me-2"></i>{{ 'Select Currency' | translate }}</h6>
+                    </div>
+                    <div class="list-group list-group-flush" style="max-height: 500px; overflow-y: auto;">
+                        <button *ngFor="let currency of currencies"
+                            class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                            [class.active]="selectedCurrency?.CurrCode === currency.CurrCode"
+                            (click)="viewRateHistory(currency)">
+                            <div>
+                                <strong>{{ currency.CurrCode }}</strong>
+                                <br>
+                                <small class="text-muted">{{ currency.CurrName }}</small>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">{{ currency.DocCurrCod }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rate History -->
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm" *ngIf="selectedCurrency">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">
+                            <i class="fas fa-chart-line me-2 text-success"></i>
+                            {{ 'Exchange Rate History' | translate }}: {{ selectedCurrency.CurrCode }}
+                        </h6>
+                        <button class="btn btn-primary btn-sm" (click)="addExchangeRate()">
+                            <i class="fas fa-plus me-1"></i> {{ 'Add Rate' | translate }}
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
+                            <table class="table table-sm table-hover mb-0">
+                                <thead class="table-light sticky-top">
+                                    <tr>
+                                        <th>{{ 'Date' | translate }}</th>
+                                        <th class="text-end">{{ 'Rate' | translate }}</th>
+                                        <th>{{ 'Reference' | translate }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let rate of exchangeRateHistory">
+                                        <td>{{ rate.RateDate | date:'medium' }}</td>
+                                        <td class="text-end font-monospace fw-bold">{{ rate.Rate | number:'1.2-4' }}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary">{{ rate.RefCurrncy }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="exchangeRateHistory.length === 0">
+                                        <td colspan="3" class="text-center text-muted py-4">
+                                            <i class="fas fa-inbox fa-2x mb-2"></i>
+                                            <p>{{ 'No exchange rate history available' | translate }}</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="card border-0 shadow-sm" *ngIf="!selectedCurrency">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-hand-pointer fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">{{ 'Select a currency to view its exchange rate history' | translate }}
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

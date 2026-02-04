@@ -1,0 +1,11 @@
+<div class="stat-card">
+    <div class="stat-icon" [ngClass]="'icon-' + color">
+        <i [class]="icon"></i>
+    </div>
+    <div class="stat-value">{{ value }}</div>
+    <div class="stat-label">{{ label }}</div>
+    <div class="stat-change" [ngClass]="change >= 0 ? 'positive' : 'negative'" *ngIf="change !== undefined">
+        <i [class]="change >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
+        {{ Math.abs(change) }}% from last month
+    </div>
+</div>

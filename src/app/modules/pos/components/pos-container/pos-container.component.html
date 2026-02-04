@@ -1,0 +1,160 @@
+<div class="pos-layout h-100 d-flex flex-column" *ngIf="(currentSession$ | async) as session; else noSession">
+  <!-- Header -->
+  <div class="pos-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-3">
+      <h4 class="mb-0 fw-bold text-primary">
+        <i class="fas fa-cash-register me-2"></i>{{ 'Point of Sale' | translate }}
+      </h4>
+      <div class="vr mx-2"></div>
+      <div class="session-info small text-muted">
+        <span class="me-3"><i class="fas fa-user-circle me-1"></i> {{ session.cashierName }}</span>
+        <span class="me-3"><i class="fas fa-clock me-1"></i> {{ session.startTime | date:'shortTime' }}</span>
+        <span class="badge bg-light text-dark border"><i class="fas fa-hashtag me-1"></i> {{ session.id }}</span>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <!-- Currency Switcher -->
+      <div class="currency-switcher me-4" *ngIf="currencyConfig$ | async as config">
+        <select class="form-select form-select-sm border-0 bg-light fw-bold" [ngModel]="selectedCurrency$ | async"
+          (ngModelChange)="onCurrencyChange($event)">
+          <option *ngFor="let curr of config.currencies" [value]="curr.code">{{ curr.code }} ({{ curr.symbol }})
+          </option>
+        </select>
+      </div>
+
+      <div class="sales-summary d-none d-lg-flex gap-3 me-3">
+        <div class="text-end">
+          <div class="small text-muted mb-0">{{ 'Total Sales' | translate }}</div>
+          <div class="fw-bold text-success">{{ session.totalSales | erpCurrency }}</div>
+        </div>
+        <div class="text-end border-start ps-3">
+          <div class="small text-muted mb-0">{{ 'Orders Count' | translate }}</div>
+          <div class="fw-bold text-primary">{{ session.ordersCount }}</div>
+        </div>
+      </div>
+      <button class="btn btn-sm btn-danger px-3 shadow-sm" (click)="closeSession()">
+        <i class="fas fa-lock me-1"></i> {{ 'Close Session' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="pos-content flex-grow-1 overflow-hidden">
+    <div class="row h-100 g-0">
+      <!-- Left: Product List -->
+      <div class="col-md-8 h-100 border-end bg-light">
+        <app-product-list></app-product-list>
+      </div>
+
+      <!-- Right: Cart -->
+      <div class="col-md-4 h-100 bg-white shadow-sm">
+        <app-cart></app-cart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Start Session Screen -->
+<ng-template #noSession>
+  <div class="h-100 d-flex align-items-center justify-content-center bg-light" *ngIf="!showZReport">
+    <div class="card border-0 shadow-lg text-center p-5" style="max-width: 500px; border-radius: 20px;">
+      <div class="mb-4">
+        <div class="icon-circle bg-primary bg-opacity-10 text-primary mx-auto mb-3"
+          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 2rem;">
+          <i class="fas fa-cash-register"></i>
+        </div>
+        <h2 class="fw-bold">{{ 'Opening Control' | translate }}</h2>
+        <p class="text-muted">{{ 'To start selling, please open a new session and enter the beginning cash in the
+          drawer.' | translate }}</p>
+      </div>
+
+      <div class="mb-4 text-start">
+        <label class="form-label fw-bold small text-uppercase text-muted">{{ 'Opening Cash' | translate }}</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-white border-end-0"><i class="fas fa-wallet text-muted"></i></span>
+          <input type="number" class="form-control border-start-0 ps-0" [(ngModel)]="openingBalance" placeholder="0.00">
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg w-100 py-3 shadow" (click)="openSession()">
+        <i class="fas fa-play me-2"></i> {{ 'Open Session' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Z-Report / Closing Screen -->
+  <div class="h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-75"
+    *ngIf="showZReport && lastClosedSession">
+    <div class="card border-0 shadow-lg p-0" style="width: 450px; border-radius: 15px;">
+      <div class="card-header bg-primary text-white p-4 text-center border-0" style="border-radius: 15px 15px 0 0;">
+        <h4 class="mb-1 fw-bold">{{ 'SESSION Z-REPORT' | translate }}</h4>
+        <div class="small opacity-75">{{ lastClosedSession.id }} | {{ lastClosedSession.endTime | date:'medium' }}</div>
+      </div>
+      <div class="card-body p-4 overflow-auto" style="max-height: 70vh;">
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">{{ 'Cashier' | translate }}</span>
+          <span class="fw-bold">{{ lastClosedSession.cashierName }}</span>
+        </div>
+        <hr>
+        <div class="row text-center mb-4">
+          <div class="col-6 border-end">
+            <div class="small text-muted mb-1">{{ 'Total Sales' | translate }}</div>
+            <div class="h3 fw-bold text-success mb-0">{{ lastClosedSession.totalSales | erpCurrency }}</div>
+          </div>
+          <div class="col-6">
+            <div class="small text-muted mb-1">{{ 'Orders' | translate }}</div>
+            <div class="h3 fw-bold text-primary mb-0">{{ lastClosedSession.ordersCount }}</div>
+          </div>
+        </div>
+
+        <div class="list-group list-group-flush small mb-4">
+          <div class="list-group-item d-flex justify-content-between px-0">
+            <span>{{ 'Opening Balance' | translate }}</span>
+            <span>{{ lastClosedSession.openingBalance | erpCurrency }}</span>
+          </div>
+          <div class="list-group-item d-flex justify-content-between px-0">
+            <span>{{ 'Cash Sales' | translate }}</span>
+            <span>+ {{ lastClosedSession.cashSales | erpCurrency }}</span>
+          </div>
+          <div class="list-group-item d-flex justify-content-between px-0">
+            <span>{{ 'Returns' | translate }}</span>
+            <span class="text-danger">- {{ lastClosedSession.returnsAmount | erpCurrency }}</span>
+          </div>
+          <div class="list-group-item d-flex justify-content-between px-0 fw-bold border-top-2">
+            <span>{{ 'Expected Cash' | translate }}</span>
+            <span>{{ (lastClosedSession.openingBalance + lastClosedSession.cashSales - lastClosedSession.returnsAmount)
+              | erpCurrency }}</span>
+          </div>
+          <div class="list-group-item d-flex justify-content-between px-0 fw-bold text-primary">
+            <span>{{ 'Actual Cash' | translate }}</span>
+            <span>{{ lastClosedSession.closingBalance | erpCurrency }}</span>
+          </div>
+          <div class="list-group-item d-flex justify-content-between px-0 fw-bold"
+            [class.text-danger]="(lastClosedSession.closingBalance || 0) < (lastClosedSession.openingBalance + lastClosedSession.cashSales - lastClosedSession.returnsAmount)">
+            <span>{{ 'Difference' | translate }}</span>
+            <span>{{ ((lastClosedSession.closingBalance || 0) - (lastClosedSession.openingBalance +
+              lastClosedSession.cashSales - lastClosedSession.returnsAmount)) | erpCurrency }}</span>
+          </div>
+        </div>
+
+        <h6 class="fw-bold mt-4 mb-3 border-bottom pb-2">{{ 'Sales by Category' | translate }}</h6>
+        <div *ngFor="let cat of (lastClosedSession.salesByCategory | keyvalue)"
+          class="d-flex justify-content-between small mb-1">
+          <span>{{ cat.key }}</span>
+          <span>{{ cat.value | erpCurrency }}</span>
+        </div>
+
+        <div class="alert alert-info py-2 small mt-4">
+          <i class="fas fa-info-circle me-2"></i> {{ 'Journal entries for this session have been reconciled in
+          accounting.' | translate }}
+        </div>
+      </div>
+      <div class="card-footer bg-white p-3 d-flex gap-2">
+        <button class="btn btn-outline-secondary w-100" (click)="finishZReport()">{{ 'Close' | translate }}</button>
+        <button class="btn btn-primary w-100" (click)="printZReport()"><i class="fas fa-print me-2"></i>{{ 'Print
+          Report' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
