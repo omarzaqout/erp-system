@@ -2,51 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-crm',
-  template: `
-    <div class="crm-page">
-      <div class="page-header shadow-sm bg-white mb-4">
-        <div class="container-fluid py-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                  <li class="breadcrumb-item"><a routerLink="/dashboard" class="text-decoration-none text-muted"><i class="fas fa-home me-1"></i>{{ 'Home' | translate }}</a></li>
-                  <li class="breadcrumb-item active fw-bold text-primary">{{ 'CRM' | translate }}</li>
-                </ol>
-              </nav>
-            </div>
-            <div class="header-actions">
-               <button class="btn btn-primary btn-sm">
-                  <i class="fas fa-plus me-1"></i> {{ 'New Lead' | translate }}
-               </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="container-fluid">
-        <div class="content-fade-in">
-           <router-outlet></router-outlet>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [`
-    @import '../../../styles/theme-config';
-    .crm-page {
-      min-height: 100vh;
-      background-color: $white;
-    }
-    .page-header {
-      border-bottom: 1px solid $white;
-    }
-    .content-fade-in {
-      animation: fadeIn 0.4s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  `]
+  templateUrl: './crm.component.html',
+  styleUrls: ['./crm.component.scss']
 })
 export class CrmComponent { }

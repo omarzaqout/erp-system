@@ -1,0 +1,33 @@
+<div class="form-page">
+    <div class="form-page-header">
+        <div class="header-content">
+            <button type="button" class="btn-back" (click)="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="header-info">
+                <div class="header-icon" *ngIf="icon">
+                    <i [class]="icon"></i>
+                </div>
+                <div>
+                    <h2 class="page-title">{{ title | translate }}</h2>
+                    <nav aria-label="breadcrumb" *ngIf="breadcrumbs.length > 0">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item" *ngFor="let crumb of breadcrumbs; let last = last">
+                                <a *ngIf="!last" [routerLink]="crumb.route">{{ crumb.label | translate }}</a>
+                                <span *ngIf="last">{{ crumb.label | translate }}</span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-page-body">
+        <div class="form-container">
+            <app-shared-form #sharedForm [config]="formConfig" [initialData]="initialData" [showActions]="true"
+                [isSubmitting]="isSubmitting" (formSubmit)="onFormSubmit($event)" (formCancel)="onFormCancel()">
+            </app-shared-form>
+        </div>
+    </div>
+</div>
