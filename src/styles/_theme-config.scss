@@ -1,0 +1,85 @@
+// Theme Variable Definitions
+// These variables are controlled dynamically by ThemeService at runtime.
+// Use these variables in your component SCSS files to ensure they respect the selected theme.
+
+:root {
+    // Dynamic Theme Variables (Updated by ThemeService)
+    --app-font-size: 16px;
+    --app-background: #f7fafc;
+    --sidebar-bg: #ffffff;
+    --navbar-bg: #ffffff;
+    --primary-blue: #0070C0;
+    --primary-blue-rgb: 0, 112, 192;
+    --table-header-bg: #f8f9fa;
+    --text-dark: #2D3748;
+    --text-light: #718096;
+    --white: #ffffff; // Used as Card Background
+    --sidebar-text: #2D3748;
+    --navbar-text: #2D3748;
+    --border: #E2E8F0;
+
+    // Static Layout Constants
+    --sidebar-width: 260px;
+    --sidebar-collapsed: 70px;
+    --header-height: 70px;
+
+    // Fixed Brand Colors
+    --dark-blue: #0058A0;
+    --light-blue: #E6F2FA;
+    --accent-orange: #FF6B35;
+    --success-green: #28A745;
+    --warning-yellow: #FFC107;
+    --danger-red: #DC3545;
+
+    // Bootstrap Table Overrides - Force Bootstrap to use our theme colors
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text-dark);
+    --bs-table-border-color: var(--border);
+    --bs-table-striped-bg: rgba(var(--primary-blue-rgb), 0.02);
+    --bs-table-hover-bg: rgba(var(--primary-blue-rgb), 0.05);
+}
+
+// SCSS Variables (Aliases for CSS Variables)
+$app-background: var(--app-background);
+$sidebar-bg: var(--sidebar-bg);
+$navbar-bg: var(--navbar-bg);
+$primary-blue: var(--primary-blue);
+$table-header-bg: var(--table-header-bg);
+$text-dark: var(--text-dark);
+$text-light: var(--text-light);
+$white: var(--white);
+$sidebar-text: var(--sidebar-text);
+$navbar-text: var(--navbar-text);
+$border: var(--border);
+$app-font-size: var(--app-font-size);
+
+// Static Brand Constants
+$accent-orange: #FF6B35;
+$success-green: #28A745;
+$warning-yellow: #FFC107;
+$danger-red: #DC3545;
+$dark-blue: #0058A0;
+$light-blue: #E6F2FA;
+$header-height: 70px;
+$sidebar-width: 260px;
+
+// SCSS Mixins for easy theme usage
+@mixin theme-text-dark {
+    color: var(--text-dark);
+}
+
+@mixin theme-text-light {
+    color: var(--text-light);
+}
+
+@mixin theme-card {
+    background-color: var(--white);
+    border: 1px solid var(--border);
+    color: var(--text-dark);
+}
+
+@mixin theme-input {
+    background-color: var(--white) !important;
+    color: var(--text-dark) !important;
+    border: 1px solid var(--border) !important;
+}

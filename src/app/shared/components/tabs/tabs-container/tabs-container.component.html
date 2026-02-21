@@ -1,0 +1,40 @@
+<div class="tabs-container" *ngIf="tabs.length > 0">
+    <div class="tabs-scroll-wrapper">
+        <div class="tabs-list">
+            <app-tab *ngFor="let tab of tabs" [tab]="tab" [isActive]="activeTabId === tab.id"
+                (tabClick)="onTabClick($event)" (tabClose)="onTabClose($event)" (tabPin)="onTabPin($event)"
+                (tabRightClick)="onTabRightClick($event)">
+            </app-tab>
+        </div>
+    </div>
+
+    <div class="tabs-actions" *ngIf="tabs.length > 1">
+        <button class="tabs-action-btn" (click)="closeAll()" [title]="'Close All Tabs' | translate">
+            <i class="fas fa-times-circle"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Context Menu -->
+<div class="context-menu" *ngIf="showContextMenu" [style.left.px]="contextMenuX" [style.top.px]="contextMenuY">
+    <div class="context-menu-item" (click)="closeTab(contextMenuTabId)">
+        <i class="fas fa-times"></i>
+        <span>{{ 'Close' | translate }}</span>
+    </div>
+    <div class="context-menu-item" (click)="closeOtherTabs(contextMenuTabId)">
+        <i class="fas fa-times-circle"></i>
+        <span>{{ 'Close Others' | translate }}</span>
+    </div>
+    <div class="context-menu-item" (click)="closeAllTabs()">
+        <i class="fas fa-window-close"></i>
+        <span>{{ 'Close All' | translate }}</span>
+    </div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" (click)="togglePin(contextMenuTabId)">
+        <i [class]="getTab(contextMenuTabId)?.pinned ? 'fas fa-thumbtack' : 'far fa-thumbtack'"></i>
+        <span>{{ (getTab(contextMenuTabId)?.pinned ? 'Unpin' : 'Pin') | translate }}</span>
+    </div>
+</div>
+
+<div class="context-menu-overlay" *ngIf="showContextMenu" (click)="hideContextMenu()">
+</div>

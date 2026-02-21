@@ -1,0 +1,33 @@
+@import '../../../../styles/theme-config';
+
+.pagination {
+    gap: 0.25rem;
+}
+
+.page-item {
+    .page-link {
+        border: none;
+        border-radius: 8px;
+        color: $text-dark;
+        padding: 0.5rem 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        background-color: transparent;
+
+        &:hover {
+            background-color: rgba(var(--primary-blue-rgb, 0, 112, 192), 0.1);
+            color: $primary-blue;
+        }
+    }
+
+    &.active .page-link {
+        background-color: $primary-blue;
+        color: white;
+    }
+
+    &.disabled .page-link {
+        color: $text-light;
+        cursor: not-allowed;
+        background-color: transparent;
+    }
+}

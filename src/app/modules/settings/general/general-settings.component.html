@@ -1,0 +1,162 @@
+<!-- Regional Settings -->
+<div class="card shadow-sm border-0 mb-4 fade-in">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-globe me-2"></i>{{ 'Regional & Language' | translate }}
+        </h5>
+    </div>
+    <div class="card-body p-4">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-4">
+                <label class="form-label fw-bold mb-0">{{ 'Language' | translate }}</label>
+                <p class="text-muted small mb-0">{{ 'Select your preferred language' | translate }}</p>
+            </div>
+            <div class="col-md-8">
+                <select class="form-select" [ngModel]="currentLang" (ngModelChange)="onLanguageChange($event)">
+                    <option value="en">English (LTR)</option>
+                    <option value="ar">العربية (Arabic - RTL)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <label class="form-label fw-bold mb-0">{{ 'Default Display Currency' | translate }}</label>
+                <p class="text-muted small mb-0">{{ 'Currency used for displaying amounts' | translate }}</p>
+            </div>
+            <div class="col-md-8">
+                <select class="form-select" [ngModel]="baseCurrency" (ngModelChange)="onBaseCurrencyChange($event)">
+                    <option *ngFor="let curr of currencies" [value]="curr.CurrCode">
+                        {{ curr.CurrCode }} - {{ curr.CurrName }} ({{ curr.DocCurrCod }})
+                    </option>
+                </select>
+                <div class="mt-2 small text-primary">
+                    <i class="fas fa-info-circle me-1"></i>
+                    {{ 'To manage currencies and rates, go to' | translate }}
+                    <a routerLink="/financial/currencies" class="fw-bold text-decoration-none">Financial Module</a>.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Theme Presets -->
+<div class="card shadow-sm border-0 mb-4 fade-in">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-layer-group me-2"></i>{{ 'Theme Presets' | translate }}
+        </h5>
+    </div>
+    <div class="card-body p-4">
+        <p class="text-muted small mb-4">{{ 'Choose a professionally designed theme for your application' | translate }}
+        </p>
+        <div class="row g-3">
+            <div class="col-md-4" *ngFor="let preset of presets">
+                <div class="preset-card p-3 border rounded-3 position-relative"
+                    [class.active]="currentTheme.id === preset.id" (click)="applyTheme(preset)">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold small">{{ (preset.name || '') | translate }}</span>
+                        <i class="fas fa-check-circle text-primary" *ngIf="currentTheme.id === preset.id"></i>
+                    </div>
+                    <div class="d-flex gap-1 mb-2">
+                        <div class="color-preview" [style.background-color]="preset.primaryColor"></div>
+                        <div class="color-preview" [style.background-color]="preset.sidebarBg"></div>
+                        <div class="color-preview" [style.background-color]="preset.background"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Theme Customization -->
+<div class="card shadow-sm border-0 mb-4 fade-in">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-palette me-2"></i>{{ 'Application Theme' | translate }}
+        </h5>
+    </div>
+    <div class="card-body p-4">
+
+        <!-- Global Font Size -->
+        <div class="row align-items-center mb-4 pb-4 border-bottom">
+            <div class="col-md-4">
+                <label class="form-label fw-bold mb-0">{{ 'Font Size' | translate }}</label>
+                <p class="text-muted small mb-0">{{ 'Adjust the global text size' | translate }}</p>
+            </div>
+            <div class="col-md-8">
+                <div class="d-flex align-items-center gap-3">
+                    <input type="range" class="form-range" min="12" max="22" step="1" [ngModel]="currentTheme.fontSize"
+                        (ngModelChange)="updateTheme({fontSize: $event})">
+                    <span class="badge bg-primary px-3 fs-6">{{ currentTheme.fontSize }}px</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Main Background -->
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light">
+                    <input type="color" class="form-control form-control-color border-0 p-0"
+                        [ngModel]="currentTheme.background" (ngModelChange)="updateTheme({background: $event})">
+                    <div>
+                        <label class="fw-bold mb-0 d-block">{{ 'Main Background' | translate }}</label>
+                        <small class="text-muted">{{ 'Background color of the app' | translate }}</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Background -->
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light">
+                    <input type="color" class="form-control form-control-color border-0 p-0"
+                        [ngModel]="currentTheme.sidebarBg" (ngModelChange)="updateTheme({sidebarBg: $event})">
+                    <div>
+                        <label class="fw-bold mb-0 d-block">{{ 'Sidebar Background' | translate }}</label>
+                        <small class="text-muted">{{ 'Side navigation menu color' | translate }}</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navbar/Header Background -->
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light">
+                    <input type="color" class="form-control form-control-color border-0 p-0"
+                        [ngModel]="currentTheme.navbarBg" (ngModelChange)="updateTheme({navbarBg: $event})">
+                    <div>
+                        <label class="fw-bold mb-0 d-block">{{ 'Navbar Background' | translate }}</label>
+                        <small class="text-muted">{{ 'Top header bar color' | translate }}</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Primary Color (Buttons) -->
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light">
+                    <input type="color" class="form-control form-control-color border-0 p-0"
+                        [ngModel]="currentTheme.primaryColor" (ngModelChange)="updateTheme({primaryColor: $event})">
+                    <div>
+                        <label class="fw-bold mb-0 d-block">{{ 'Primary Color (Buttons)' | translate }}</label>
+                        <small class="text-muted">{{ 'Action buttons and accents' | translate }}</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Header Background -->
+            <div class="col-md-6">
+                <div class="d-flex align-items-center gap-3 p-3 border rounded-3 bg-light">
+                    <input type="color" class="form-control form-control-color border-0 p-0"
+                        [ngModel]="currentTheme.tableHeaderBg" (ngModelChange)="updateTheme({tableHeaderBg: $event})">
+                    <div>
+                        <label class="fw-bold mb-0 d-block">{{ 'Table Headers' | translate }}</label>
+                        <small class="text-muted">{{ 'Color of tables header row' | translate }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="mt-4 pt-4 border-top text-end">
+            <button class="btn btn-outline-secondary btn-sm" (click)="resetTheme()">
+                <i class="fas fa-undo me-1"></i> {{ 'Reset to Default Theme' | translate }}
+            </button>
+        </div>
+    </div>
+</div>

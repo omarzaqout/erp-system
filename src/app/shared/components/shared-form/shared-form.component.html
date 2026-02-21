@@ -1,0 +1,94 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-container" [class]="'layout-' + (config.layout || 'single')">
+        <div *ngFor="let field of config.fields || []" class="form-field" [class.required]="field.required">
+
+            <label [for]="field.key" class="form-label">
+                {{ field.label | translate }}
+                <span *ngIf="field.required" class="text-danger">*</span>
+            </label>
+
+            <div *ngIf="field.helpText" class="form-help-text">
+                {{ field.helpText | translate }}
+            </div>
+
+            <!-- Text Input -->
+            <input *ngIf="field.type === 'text' || field.type === 'email'" [id]="field.key" [type]="field.type"
+                [formControlName]="field.key" [placeholder]="(field.placeholder || '') | translate"
+                [disabled]="field.disabled || false" class="form-control"
+                [class.is-invalid]="isFieldInvalid(field.key)">
+
+            <!-- Number Input -->
+            <input *ngIf="field.type === 'number' || field.type === 'currency'" [id]="field.key" type="number"
+                [formControlName]="field.key" [placeholder]="(field.placeholder || '') | translate"
+                [disabled]="field.disabled || false" [step]="field.step || (field.type === 'currency' ? 0.01 : 1)"
+                [min]="field.validation?.min ?? null" [max]="field.validation?.max ?? null" class="form-control"
+                [class.is-invalid]="isFieldInvalid(field.key)">
+
+            <!-- Date Input -->
+            <input *ngIf="field.type === 'date'" [id]="field.key" type="date" [formControlName]="field.key"
+                [disabled]="field.disabled || false" class="form-control"
+                [class.is-invalid]="isFieldInvalid(field.key)">
+
+            <!-- Select Dropdown -->
+            <select *ngIf="field.type === 'select'" [id]="field.key" [formControlName]="field.key"
+                [disabled]="field.disabled || false" class="form-select" [class.is-invalid]="isFieldInvalid(field.key)">
+                <option [value]="''" *ngIf="!field.required">Select {{ field.label | translate }}</option>
+                <option *ngFor="let option of field.options || []" [value]="option.value">
+                    {{ option.label | translate }}
+                </option>
+            </select>
+
+            <!-- Textarea -->
+            <textarea *ngIf="field.type === 'textarea'" [id]="field.key" [formControlName]="field.key"
+                [placeholder]="(field.placeholder || '') | translate" [disabled]="field.disabled || false"
+                [rows]="field.rows || 3" class="form-control" [class.is-invalid]="isFieldInvalid(field.key)"></textarea>
+
+            <!-- Checkbox -->
+            <div *ngIf="field.type === 'checkbox'" class="form-check">
+                <input [id]="field.key" type="checkbox" [formControlName]="field.key"
+                    [disabled]="field.disabled || false" class="form-check-input"
+                    [class.is-invalid]="isFieldInvalid(field.key)">
+                <label [for]="field.key" class="form-check-label">
+                    {{ (field.placeholder || field.label) | translate }}
+                </label>
+            </div>
+
+            <!-- Error Messages -->
+            <div class="invalid-feedback" *ngIf="isFieldInvalid(field.key)">
+                <span *ngIf="getFieldControl(field.key)?.errors?.['required']">
+                    {{ (field.label | translate) }} {{ 'is required' | translate }}
+                </span>
+                <span *ngIf="getFieldControl(field.key)?.errors?.['email']">
+                    {{ 'Please enter a valid email address' | translate }}
+                </span>
+                <span *ngIf="getFieldControl(field.key)?.errors?.['min']">
+                    {{ 'Minimum value is' | translate }} {{ field.validation?.min }}
+                </span>
+                <span *ngIf="getFieldControl(field.key)?.errors?.['max']">
+                    {{ 'Maximum value is' | translate }} {{ field.validation?.max }}
+                </span>
+                <span *ngIf="getFieldControl(field.key)?.errors?.['minlength']">
+                    {{ 'Minimum length is' | translate }} {{ field.validation?.minLength }} {{ 'characters' | translate
+                    }}
+                </span>
+                <span *ngIf="getFieldControl(field.key)?.errors?.['maxlength']">
+                    {{ 'Maximum length is' | translate }} {{ field.validation?.maxLength }} {{ 'characters' | translate
+                    }}
+                </span>
+                <span *ngIf="getFieldControl(field.key)?.errors?.['pattern']">
+                    {{ 'Invalid format' | translate }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions" *ngIf="showActions">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()" *ngIf="config.showCancel !== false">
+            {{ (config.cancelLabel || 'Cancel') | translate }}
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isSubmitting">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+            {{ (config.submitLabel || 'Submit') | translate }}
+        </button>
+    </div>
+</form>

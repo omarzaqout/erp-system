@@ -1,0 +1,76 @@
+@import '../../../styles/theme-config';
+
+.accounting-page {
+    min-height: 100vh;
+    background-color: $app-background;
+    color: $text-dark;
+}
+
+.page-header {
+    background-color: $white;
+    border-bottom: 1px solid $border;
+
+    .breadcrumb-item {
+        font-size: 0.95rem;
+
+        a {
+            color: $text-light;
+            transition: all 0.2s;
+
+            &:hover {
+                color: $primary-blue;
+                text-decoration: none;
+            }
+        }
+
+        &.active {
+            color: $primary-blue;
+            font-weight: 600;
+        }
+
+        &+.breadcrumb-item::before {
+            content: "›";
+            font-size: 1.1rem;
+            line-height: 1;
+            vertical-align: middle;
+            color: $border;
+            padding: 0 0.5rem;
+        }
+    }
+}
+
+.badge {
+    background-color: $table-header-bg !important;
+    color: $text-dark !important;
+    border: 1px solid $border !important;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 8px;
+
+    i {
+        color: $primary-blue;
+    }
+}
+
+.btn-sm {
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 0.4rem 0.8rem;
+}
+
+.content-fade-in {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

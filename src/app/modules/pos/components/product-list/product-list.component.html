@@ -1,8 +1,8 @@
-<div class="h-100 d-flex flex-column">
+<div class="h-100 d-flex flex-column product-list-container">
     <!-- Search & Filters -->
-    <div class="p-3 bg-white border-bottom shadow-sm">
+    <div class="p-3 search-header shadow-sm">
         <div class="input-group input-group-lg mb-3">
-            <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+            <span class="input-group-text border-end-0"><i class="fas fa-search text-muted"></i></span>
             <input type="text" class="form-control border-start-0 ps-0" [placeholder]="'Search products' | translate"
                 (input)="onSearch($event)">
         </div>
@@ -38,17 +38,16 @@
     </div>
 
     <!-- Grid -->
-    <div class="flex-grow-1 overflow-auto p-3 bg-light bg-opacity-50">
+    <div class="flex-grow-1 overflow-auto p-3">
         <div class="row g-3">
             <div class="col-6 col-lg-4 col-xl-3" *ngFor="let product of products$ | async">
                 <div class="card h-100 border-0 shadow-sm product-card transition-all" (click)="addToCart(product)"
                     role="button">
-                    <div class="card-img-top bg-white d-flex align-items-center justify-content-center p-3"
+                    <div class="card-img-top d-flex align-items-center justify-content-center p-3"
                         style="height: 140px;">
-                        <i class="fas fa-box fa-3x text-secondary opacity-25"></i>
-                        <!-- <img [src]="product.image" class="img-fluid" style="max-height: 120px;"> -->
+                        <i class="fas fa-box fa-3x"></i>
                     </div>
-                    <div class="card-body p-2 text-center bg-white border-top">
+                    <div class="card-body p-2 text-center border-top">
                         <h6 class="card-title text-truncate mb-1 small fw-bold" [title]="product.name">{{ product.name
                             }}</h6>
                         <div class="text-primary fw-bold">{{ product.price | erpCurrency }}</div>
@@ -65,18 +64,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .product-card {
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
-    }
-
-    .extra-small {
-        font-size: 0.7rem;
-    }
-</style>

@@ -1,0 +1,43 @@
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th *ngFor="let column of columns" [class.sortable]="column.sortable"
+                    (click)="column.sortable && onSort(column.key)">
+                    {{ column.label | translate }}
+                    <i *ngIf="column.sortable" class="fas" [class.fa-sort]="sortColumn !== column.key"
+                        [class.fa-sort-up]="sortColumn === column.key && sortDirection === 'asc'"
+                        [class.fa-sort-down]="sortColumn === column.key && sortDirection === 'desc'">
+                    </i>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of data" (click)="onRowClick(row)">
+                <td *ngFor="let column of columns">
+                    <ng-container [ngSwitch]="column.type">
+                        <span *ngSwitchCase="'currency'">{{ row[column.key] | erpCurrency }}</span>
+                        <span *ngSwitchCase="'date'">{{ row[column.key] | erpDate }}</span>
+                        <span *ngSwitchCase="'badge'" class="badge" [ngClass]="row[column.key] | statusBadge">
+                            {{ row[column.key] | translate }}
+                        </span>
+                        <span *ngSwitchCase="'actions'">
+                            <button *ngFor="let action of row.actions" class="btn btn-sm me-1" [ngClass]="action.class"
+                                (click)="$event.stopPropagation(); actionClick.emit({action: action.key, row: row})"
+                                [appTooltip]="action.label | translate">
+                                <i [class]="action.icon"></i>
+                            </button>
+                        </span>
+                        <span *ngSwitchDefault>{{ row[column.key] }}</span>
+                    </ng-container>
+                </td>
+            </tr>
+            <tr *ngIf="data.length === 0">
+                <td [attr.colspan]="columns.length" class="text-center py-4">
+                    <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">{{ 'No data available' | translate }}</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

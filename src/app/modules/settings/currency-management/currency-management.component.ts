@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CurrencyManagementService, Currency, ExchangeRate } from '../../../core/services/currency-management.service';
 import { ModalService } from '../../../shared/services/modal.service';
 import { FormConfig } from '../../../shared/components/shared-form/shared-form.component';
@@ -19,10 +20,18 @@ export class CurrencyManagementComponent implements OnInit {
 
   constructor(
     private currencyService: CurrencyManagementService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    // Check for tab query param
+    this.route.queryParams.subscribe(params => {
+      if (params['tab'] === 'rates' || params['tab'] === 'currencies') {
+        this.activeTab = params['tab'];
+      }
+    });
+
     this.currencyService.currencies$.subscribe(currencies => {
       this.currencies = currencies;
     });
@@ -218,7 +227,7 @@ export class CurrencyManagementComponent implements OnInit {
         }
       ],
       submitLabel: 'Add Rate',
-      layout: 'single-column'
+      layout: 'single'
     };
 
     this.modalService.openForm({

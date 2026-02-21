@@ -5,39 +5,8 @@ import { TableColumn } from '../../../shared/components/data-table/data-table.co
 
 @Component({
   selector: 'app-customers',
-  template: `
-    <div class="customers-page">
-      <app-search-filter
-        (search)="onSearch($event)"
-        (filter)="onFilter($event)"
-        (addNew)="onAddNew()">
-      </app-search-filter>
-      
-      <div class="card">
-        <div class="card-body p-0">
-          <app-data-table
-            [columns]="columns"
-            [data]="filteredCustomers"
-            (rowClick)="onRowClick($event)">
-          </app-data-table>
-        </div>
-      </div>
-      
-      <app-pagination
-        [currentPage]="currentPage"
-        [pageSize]="pageSize"
-        [totalItems]="totalItems"
-        (pageChange)="onPageChange($event)">
-      </app-pagination>
-    </div>
-  `,
-  styles: [`
-    .customers-page {
-      .card {
-        margin-bottom: 1rem;
-      }
-    }
-  `]
+  templateUrl: './customers.component.html',
+  styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
   customers: Customer[] = [];

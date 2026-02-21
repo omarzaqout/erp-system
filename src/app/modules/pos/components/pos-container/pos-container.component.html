@@ -1,54 +1,64 @@
 <div class="pos-layout h-100 d-flex flex-column" *ngIf="(currentSession$ | async) as session; else noSession">
   <!-- Header -->
-  <div class="pos-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center gap-3">
-      <h4 class="mb-0 fw-bold text-primary">
-        <i class="fas fa-cash-register me-2"></i>{{ 'Point of Sale' | translate }}
+  <div
+    class="pos-header bg-white border-bottom p-2 p-md-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <div class="d-flex align-items-center gap-2 gap-md-3">
+      <h4 class="mb-0 fw-bold text-primary fs-5 fs-md-4">
+        <i class="fas fa-cash-register me-1 me-md-2"></i><span class="d-none d-sm-inline">{{ 'Point of Sale' | translate
+          }}</span>
       </h4>
-      <div class="vr mx-2"></div>
-      <div class="session-info small text-muted">
-        <span class="me-3"><i class="fas fa-user-circle me-1"></i> {{ session.cashierName }}</span>
-        <span class="me-3"><i class="fas fa-clock me-1"></i> {{ session.startTime | date:'shortTime' }}</span>
+      <div class="vr mx-1 mx-md-2 d-none d-sm-block"></div>
+      <div class="session-info small text-muted d-none d-sm-block">
+        <span class="me-2 me-md-3"><i class="fas fa-user-circle me-1"></i> {{ session.cashierName }}</span>
         <span class="badge bg-light text-dark border"><i class="fas fa-hashtag me-1"></i> {{ session.id }}</span>
       </div>
     </div>
 
-    <div class="d-flex align-items-center gap-3">
+    <div class="d-flex align-items-center gap-2">
       <!-- Currency Switcher -->
-      <div class="currency-switcher me-4" *ngIf="currencyConfig$ | async as config">
+      <div class="currency-switcher" *ngIf="currencyConfig$ | async as config">
         <select class="form-select form-select-sm border-0 bg-light fw-bold" [ngModel]="selectedCurrency$ | async"
           (ngModelChange)="onCurrencyChange($event)">
-          <option *ngFor="let curr of config.currencies" [value]="curr.code">{{ curr.code }} ({{ curr.symbol }})
+          <option *ngFor="let curr of config.currencies" [value]="curr.code">{{ curr.code }}
           </option>
         </select>
       </div>
 
-      <div class="sales-summary d-none d-lg-flex gap-3 me-3">
+      <div class="sales-summary d-none d-xl-flex gap-3 me-2">
         <div class="text-end">
           <div class="small text-muted mb-0">{{ 'Total Sales' | translate }}</div>
           <div class="fw-bold text-success">{{ session.totalSales | erpCurrency }}</div>
         </div>
-        <div class="text-end border-start ps-3">
-          <div class="small text-muted mb-0">{{ 'Orders Count' | translate }}</div>
-          <div class="fw-bold text-primary">{{ session.ordersCount }}</div>
-        </div>
       </div>
-      <button class="btn btn-sm btn-danger px-3 shadow-sm" (click)="closeSession()">
-        <i class="fas fa-lock me-1"></i> {{ 'Close Session' | translate }}
+
+      <button class="btn btn-sm btn-danger px-2 px-md-3 shadow-sm" (click)="closeSession()">
+        <i class="fas fa-lock me-1"></i> <span class="d-none d-md-inline">{{ 'Close' | translate }}</span>
       </button>
     </div>
+  </div>
+
+  <!-- Mobile View Toggle -->
+  <div class="pos-mobile-nav d-md-none d-flex border-bottom bg-white">
+    <button class="flex-grow-1 py-3 btn rounded-0 border-end" [class.btn-primary]="activeMobileView === 'products'"
+      [class.btn-light]="activeMobileView !== 'products'" (click)="activeMobileView = 'products'">
+      <i class="fas fa-th-large me-2"></i>{{ 'Products' | translate }}
+    </button>
+    <button class="flex-grow-1 py-3 btn rounded-0" [class.btn-primary]="activeMobileView === 'cart'"
+      [class.btn-light]="activeMobileView !== 'cart'" (click)="activeMobileView = 'cart'">
+      <i class="fas fa-shopping-cart me-2"></i>{{ 'Cart' | translate }}
+    </button>
   </div>
 
   <!-- Main Content -->
   <div class="pos-content flex-grow-1 overflow-hidden">
     <div class="row h-100 g-0">
       <!-- Left: Product List -->
-      <div class="col-md-8 h-100 border-end bg-light">
+      <div class="col-md-8 h-100 border-end bg-light" [class.d-none]="activeMobileView !== 'products' && isMobile">
         <app-product-list></app-product-list>
       </div>
 
       <!-- Right: Cart -->
-      <div class="col-md-4 h-100 bg-white shadow-sm">
+      <div class="col-md-4 h-100 bg-white shadow-sm" [class.d-none]="activeMobileView !== 'cart' && isMobile">
         <app-cart></app-cart>
       </div>
     </div>
@@ -84,7 +94,7 @@
   </div>
 
   <!-- Z-Report / Closing Screen -->
-  <div class="h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-75"
+  <div class="h-100 d-flex align-items-center justify-content-center z-report-overlay"
     *ngIf="showZReport && lastClosedSession">
     <div class="card border-0 shadow-lg p-0" style="width: 450px; border-radius: 15px;">
       <div class="card-header bg-primary text-white p-4 text-center border-0" style="border-radius: 15px 15px 0 0;">
@@ -93,17 +103,17 @@
       </div>
       <div class="card-body p-4 overflow-auto" style="max-height: 70vh;">
         <div class="d-flex justify-content-between mb-2">
-          <span class="text-muted">{{ 'Cashier' | translate }}</span>
+          <span>{{ 'Cashier' | translate }}</span>
           <span class="fw-bold">{{ lastClosedSession.cashierName }}</span>
         </div>
         <hr>
         <div class="row text-center mb-4">
           <div class="col-6 border-end">
-            <div class="small text-muted mb-1">{{ 'Total Sales' | translate }}</div>
+            <div class="small mb-1">{{ 'Total Sales' | translate }}</div>
             <div class="h3 fw-bold text-success mb-0">{{ lastClosedSession.totalSales | erpCurrency }}</div>
           </div>
           <div class="col-6">
-            <div class="small text-muted mb-1">{{ 'Orders' | translate }}</div>
+            <div class="small mb-1">{{ 'Orders' | translate }}</div>
             <div class="h3 fw-bold text-primary mb-0">{{ lastClosedSession.ordersCount }}</div>
           </div>
         </div>
@@ -150,7 +160,7 @@
           accounting.' | translate }}
         </div>
       </div>
-      <div class="card-footer bg-white p-3 d-flex gap-2">
+      <div class="card-footer p-3 d-flex gap-2">
         <button class="btn btn-outline-secondary w-100" (click)="finishZReport()">{{ 'Close' | translate }}</button>
         <button class="btn btn-primary w-100" (click)="printZReport()"><i class="fas fa-print me-2"></i>{{ 'Print
           Report' | translate }}</button>

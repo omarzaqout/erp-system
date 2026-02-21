@@ -1,10 +1,62 @@
-.product-card {
-    cursor: pointer;
-    transition: transform 0.1s, box-shadow 0.1s;
+@import '../../../../styles/theme-config';
+
+.product-list-container {
+    background-color: $app-background;
 }
 
-.product-card:active {
-    transform: scale(0.98);
+.search-header {
+    background-color: $white !important;
+    border-bottom: 1px solid $border !important;
+
+    .input-group-text,
+    .form-control {
+        background-color: $app-background !important;
+        border-color: $border !important;
+        color: $text-dark !important;
+    }
+}
+
+.product-card {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: $white !important;
+    @include theme-card;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        border-color: $primary-blue !important;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    .card-img-top {
+        background-color: $app-background !important;
+        border-bottom: 1px solid $border;
+
+        i {
+            opacity: 0.15;
+            color: $text-light;
+        }
+    }
+
+    .card-body {
+        background-color: $white !important;
+
+        h6 {
+            color: $text-dark;
+        }
+
+        .text-primary {
+            color: $primary-blue !important;
+        }
+
+        .text-muted {
+            color: $text-light !important;
+        }
+    }
 }
 
 .category-tags::-webkit-scrollbar {
@@ -12,6 +64,10 @@
 }
 
 .category-tags::-webkit-scrollbar-thumb {
-    background: #ccc;
+    background: $border;
     border-radius: 4px;
+}
+
+.extra-small {
+    font-size: 0.7rem;
 }

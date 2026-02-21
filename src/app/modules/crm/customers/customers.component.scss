@@ -1,0 +1,8 @@
+@import '../../../../styles/theme-config';
+
+.customers-page {
+    .card {
+        @include theme-card;
+        margin-bottom: 1rem;
+    }
+}

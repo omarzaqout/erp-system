@@ -1,0 +1,31 @@
+<div class="modal-form-wrapper">
+    <div class="modal-form-header">
+        <div class="header-content">
+            <div class="header-icon" *ngIf="config.icon">
+                <i [class]="config.icon"></i>
+            </div>
+            <h4 class="header-title">{{ config.title }}</h4>
+        </div>
+        <button type="button" class="btn-close-header" (click)="onClose()" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="modal-form-body">
+        <app-shared-form #sharedForm [config]="config.formConfig" [initialData]="config.initialData"
+            [showActions]="false" (formSubmit)="onFormSubmit($event)" (formCancel)="onFormCancel()">
+        </app-shared-form>
+    </div>
+
+    <div class="modal-form-footer">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+            <i class="fas fa-times me-2"></i>
+            {{ config.formConfig.cancelLabel || ('Cancel' | translate) }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="!isFormValid || isSubmitting">
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!isSubmitting" class="fas fa-check me-2"></i>
+            {{ config.formConfig.submitLabel || ('Save' | translate) }}
+        </button>
+    </div>
+</div>

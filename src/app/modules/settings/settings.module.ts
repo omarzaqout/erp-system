@@ -8,7 +8,6 @@ import { ProfileComponent } from './profile/profile.component';
 import { CompanyComponent } from './company/company.component';
 import { ModulesComponent } from './modules/modules.component';
 import { GeneralSettingsComponent } from './general/general-settings.component';
-import { CurrencyManagementComponent } from './currency-management/currency-management.component';
 import { SharedModule } from '../../shared/shared.module';
 
 const routes: Routes = [
@@ -18,7 +17,6 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'general', pathMatch: 'full' },
       { path: 'general', component: GeneralSettingsComponent },
-      { path: 'currencies', component: CurrencyManagementComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'company', component: CompanyComponent },
       { path: 'modules', component: ModulesComponent }
@@ -32,8 +30,7 @@ const routes: Routes = [
     ProfileComponent,
     CompanyComponent,
     ModulesComponent,
-    GeneralSettingsComponent,
-    CurrencyManagementComponent
+    GeneralSettingsComponent
   ],
   imports: [
     CommonModule,

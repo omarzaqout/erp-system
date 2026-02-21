@@ -1,0 +1,55 @@
+@import '../../../../styles/theme-config';
+
+.table {
+    margin-bottom: 0;
+    background-color: transparent !important;
+}
+
+th {
+    font-weight: 600;
+    color: $text-dark !important;
+    border-top: none;
+    background-color: var(--table-header-bg, $app-background) !important;
+    white-space: nowrap;
+    border-bottom: 2px solid $border !important;
+}
+
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+th.sortable:hover {
+    background-color: rgba(var(--primary-blue-rgb, 0, 112, 192), 0.1) !important;
+}
+
+th .fas {
+    margin-left: 0.5rem;
+    color: $text-light !important;
+    font-size: 0.75rem;
+}
+
+td {
+    vertical-align: middle;
+    color: $text-dark !important;
+    border-bottom: 1px solid $border !important;
+}
+
+tbody tr {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+tbody tr:hover {
+    background-color: rgba(var(--primary-blue-rgb, 0, 112, 192), 0.05) !important;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.4em 0.8em;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}

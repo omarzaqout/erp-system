@@ -1,0 +1,14 @@
+<div class="tab-item" [class.active]="isActive" [class.pinned]="tab.pinned" (click)="onClick()"
+    (contextmenu)="onRightClick($event)">
+    <i *ngIf="tab.icon" [class]="tab.icon" class="tab-icon"></i>
+    <span class="tab-title">{{ tab.title }}</span>
+    <div class="tab-actions">
+        <button *ngIf="tab.closable" class="tab-action-btn" (click)="onClose($event)"
+            [title]="(tab.pinned ? 'Unpin and Close' : 'Close') | translate">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="tab-action-btn" (click)="onPin($event)" [title]="(tab.pinned ? 'Unpin' : 'Pin') | translate">
+            <i [class]="tab.pinned ? 'fas fa-thumbtack' : 'far fa-thumbtack'"></i>
+        </button>
+    </div>
+</div>

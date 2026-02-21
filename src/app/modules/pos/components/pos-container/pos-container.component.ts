@@ -19,6 +19,11 @@ export class PosContainerComponent implements OnInit {
   
   showZReport: boolean = false;
   lastClosedSession: PosSession | null = null;
+  activeMobileView: 'products' | 'cart' = 'products';
+  
+  get isMobile(): boolean {
+    return window.innerWidth < 768;
+  }
   
   // Barcode scanning buffer
   private barcodeBuffer: string = '';

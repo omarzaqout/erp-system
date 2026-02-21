@@ -1,8 +1,9 @@
 <header class="header">
     <div class="header-left">
-        <button class="menu-toggle" (click)="toggleSidebar()">
-            <i class="fas fa-bars"></i>
-        </button>
+        <div class="mobile-brand d-md-none me-3" routerLink="/dashboard" style="cursor: pointer;">
+            <i class="fas fa-rocket text-primary me-1"></i>
+            <span class="fw-bold" style="font-size: 1.1rem; color: var(--primary-blue)">AG ERP</span>
+        </div>
         <div class="breadcrumb">
             <span *ngFor="let item of breadcrumbs; let last = last" [class.active]="last">
                 {{ item | translate }}

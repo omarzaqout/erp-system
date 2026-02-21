@@ -1,4 +1,94 @@
-:host {
-    display: block;
-    height: 100%;
+@import '../../../../styles/theme-config';
+
+.customer-selection {
+    background-color: $white !important;
+    border-bottom: 1px solid $border !important;
+
+    .input-group-text,
+    .form-control {
+        background-color: $app-background !important;
+        border-color: $border !important;
+        color: $text-dark !important;
+    }
+}
+
+.cart-content {
+    background-color: $app-background !important;
+
+    .item-card-pos {
+        background-color: $white !important;
+        @include theme-card;
+
+        .fw-bold {
+            color: $text-dark !important;
+        }
+
+        .text-muted {
+            color: $text-light !important;
+        }
+    }
+}
+
+.totals-section,
+.pricing-controls {
+    background-color: $white !important;
+    border-top: 1px solid $border !important;
+    color: $text-dark;
+
+    .text-muted {
+        color: $text-light !important;
+    }
+
+    .text-primary {
+        color: $primary-blue !important;
+    }
+}
+
+.customer-dropdown {
+    background-color: $white !important;
+    border-color: $border !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+    z-index: 1050;
+    position: absolute;
+    width: 100%;
+
+    .bg-light {
+        background-color: $table-header-bg !important;
+    }
+
+    .customer-item {
+        color: $text-dark;
+        border-bottom: 1px solid $border;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(var(--primary-blue-rgb), 0.05);
+            color: $primary-blue;
+        }
+    }
+}
+
+.payment-screen {
+    background-color: $app-background !important;
+}
+
+.payment-card {
+    @include theme-card;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &.active {
+        border-color: $primary-blue !important;
+        background-color: rgba(var(--primary-blue-rgb), 0.05) !important;
+        color: $primary-blue !important;
+
+        i {
+            color: $primary-blue !important;
+        }
+    }
+
+    &:hover:not(.active) {
+        transform: translateY(-5px);
+        border-color: $border;
+    }
 }

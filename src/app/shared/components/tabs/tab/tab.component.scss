@@ -1,0 +1,125 @@
+@import '../../../../../styles/theme-config';
+
+.tab-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    background: var(--table-header-bg);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    min-width: 120px;
+    max-width: 220px;
+    user-select: none;
+    margin-right: 2px;
+
+    @media (max-width: 576px) {
+        min-width: 90px;
+        padding: 0.5rem 0.75rem;
+    }
+
+    &:hover {
+        background: var(--light-blue);
+        transform: translateY(-1px);
+
+        .tab-actions {
+            opacity: 1;
+        }
+
+        .tab-title {
+            color: var(--primary-blue);
+        }
+    }
+
+    &.active {
+        background: var(--white);
+        border-color: var(--border);
+        border-top: 2px solid var(--primary-blue);
+        z-index: 10;
+        margin-bottom: -1px;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+
+        .tab-title {
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        .tab-icon {
+            color: var(--primary-blue);
+        }
+    }
+
+    &.pinned {
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: var(--warning-yellow);
+            border-radius: 10px 0 0 0;
+        }
+
+        .tab-icon {
+            color: var(--warning-yellow);
+        }
+    }
+
+    .tab-icon {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        flex-shrink: 0;
+        transition: color 0.2s;
+    }
+
+    .tab-title {
+        flex: 1;
+        font-size: 0.875rem;
+        color: var(--text-dark);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    .tab-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        opacity: 0;
+        transition: opacity 0.2s;
+        flex-shrink: 0;
+
+        @media (max-width: 576px) {
+            opacity: 1;
+        }
+    }
+
+    .tab-action-btn {
+        background: none;
+        border: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--text-light);
+        font-size: 0.8rem;
+        transition: all 0.2s;
+        padding: 0;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-dark);
+            transform: scale(1.1);
+        }
+    }
+}

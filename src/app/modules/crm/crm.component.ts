@@ -32,12 +32,13 @@ import { Component } from '@angular/core';
     </div>
   `,
   styles: [`
+    @import '../../../styles/theme-config';
     .crm-page {
       min-height: 100vh;
-      background-color: #f8f9fa;
+      background-color: $white;
     }
     .page-header {
-      border-bottom: 1px solid #dee2e6;
+      border-bottom: 1px solid $white;
     }
     .content-fade-in {
       animation: fadeIn 0.4s ease-in-out;

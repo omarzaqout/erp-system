@@ -13,9 +13,9 @@
         <ul class="nav-list">
             <li class="nav-item-wrapper" *ngFor="let item of menuItems" [class.has-children]="item.children">
                 <!-- Main Link / Sub-menu Toggle -->
-                <a class="nav-link" [routerLink]="item.children ? null : item.route" routerLinkActive="active"
-                    (click)="toggleSubMenu(item, $event)" [appTooltip]="isCollapsed ? (item.label | translate) : ''"
-                    tooltipPosition="right">
+                <a class="nav-link" [routerLink]="item.children ? null : item.route" [queryParams]="item.queryParams"
+                    routerLinkActive="active" (click)="item.children ? toggleSubMenu(item, $event) : onLinkClick()"
+                    [appTooltip]="isCollapsed ? (item.label | translate) : ''" tooltipPosition="right">
                     <i [class]="item.icon"></i>
                     <span class="nav-text" *ngIf="!isCollapsed">{{ item.label | translate }}</span>
                     <span class="badge bg-danger" *ngIf="item.badge && !isCollapsed">{{ item.badge }}</span>
@@ -28,7 +28,8 @@
                 <!-- Sub-menu Items -->
                 <ul class="sub-nav-list" *ngIf="item.children && isExpanded(item) && !isCollapsed">
                     <li *ngFor="let child of item.children" class="sub-nav-item">
-                        <a class="sub-nav-link" [routerLink]="child.route" routerLinkActive="active">
+                        <a class="sub-nav-link" [routerLink]="child.route" [queryParams]="child.queryParams"
+                            routerLinkActive="active" (click)="onLinkClick()">
                             <i [class]="child.icon"></i>
                             <span class="sub-nav-text">{{ child.label | translate }}</span>
                         </a>

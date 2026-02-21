@@ -1,0 +1,56 @@
+<div class="main-wrapper" [class.mobile-menu-open]="showMobileMenu">
+    <app-sidebar class="d-desktop-only"></app-sidebar>
+    <div class="sidebar-overlay" (click)="closeSidebar()"></div>
+
+    <div class="main-content">
+        <app-header></app-header>
+        <app-tabs-container class="d-desktop-only"></app-tabs-container>
+        <div class="content-area">
+            <router-outlet></router-outlet>
+        </div>
+        <app-footer class="d-desktop-only"></app-footer>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-bottom-nav d-md-none">
+        <a routerLink="/dashboard" class="nav-item" routerLinkActive="active">
+            <i class="fas fa-home"></i>
+            <span>{{ 'Home' | translate }}</span>
+        </a>
+        <a routerLink="/accounting" class="nav-item" routerLinkActive="active">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <span>{{ 'Accounts' | translate }}</span>
+        </a>
+        <div class="nav-item pos-fab-wrapper">
+            <a routerLink="/pos" class="pos-fab shadow-lg">
+                <i class="fas fa-cash-register"></i>
+            </a>
+        </div>
+        <a class="nav-item" (click)="toggleNotifications()">
+            <i class="fas fa-bell"></i>
+            <span>{{ 'Alerts' | translate }}</span>
+        </a>
+        <a class="nav-item" (click)="toggleMobileMenu()">
+            <i class="fas fa-th-large"></i>
+            <span>{{ 'Menu' | translate }}</span>
+        </a>
+    </nav>
+
+    <!-- Mobile App Launcher (Grid) -->
+    <div class="mobile-launcher-overlay" *ngIf="showMobileMenu" (click)="toggleMobileMenu()">
+        <div class="launcher-content" (click)="$event.stopPropagation()">
+            <div class="launcher-header">
+                <h5>{{ 'All Modules' | translate }}</h5>
+                <button class="btn-close-launcher" (click)="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="launcher-grid">
+                <a *ngFor="let m of modules" [routerLink]="m.route" class="launcher-item" (click)="toggleMobileMenu()">
+                    <div class="icon-box" [style.backgroundColor]="m.color || 'var(--primary-blue)'">
+                        <i [class]="m.icon"></i>
+                    </div>
+                    <span>{{ m.displayName | translate }}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

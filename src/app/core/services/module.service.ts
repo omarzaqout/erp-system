@@ -137,6 +137,18 @@ export class ModuleService {
         features: ['analytics', 'exports', 'schedules']
       },
       {
+        id: 'financial',
+        name: 'financial',
+        displayName: 'Financial',
+        description: 'Currency and financial management',
+        icon: 'fas fa-coins',
+        route: '/financial',
+        enabled: true,
+        category: 'accounting',
+        order: 5.5,
+        features: ['currencies', 'exchange_rates']
+      },
+      {
         id: 'settings',
         name: 'settings',
         displayName: 'Settings',

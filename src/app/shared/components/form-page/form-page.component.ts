@@ -50,6 +50,7 @@ import { SharedFormComponent, FormConfig } from '../shared-form/shared-form.comp
     </div>
   `,
   styles: [`
+    @import '../../../../styles/theme-config';
     .form-page {
       display: flex;
       flex-direction: column;
@@ -58,7 +59,7 @@ import { SharedFormComponent, FormConfig } from '../shared-form/shared-form.comp
     }
     
     .form-page-header {
-      background: white;
+      background-color: $white;
       border-bottom: 1px solid var(--border);
       padding: 1.5rem;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -146,7 +147,7 @@ import { SharedFormComponent, FormConfig } from '../shared-form/shared-form.comp
       .form-container {
         max-width: 1200px;
         margin: 0 auto;
-        background: white;
+        background-color: $white;
         border-radius: 12px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         padding: 2rem;

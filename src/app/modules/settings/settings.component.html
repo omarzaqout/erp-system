@@ -1,0 +1,49 @@
+<div class="settings-page">
+    <div class="page-header">
+        <div>
+            <h1>{{ 'Settings' | translate }}</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a routerLink="/dashboard">{{ 'Home' | translate }}</a></li>
+                    <li class="breadcrumb-item active">{{ 'Settings' | translate }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card shadow-sm border-0">
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item" routerLink="general" routerLinkActive="active">
+                        <i class="fas fa-cog"></i>
+                        {{ 'General' | translate }}
+                    </a>
+                    <a class="list-group-item" routerLink="profile" routerLinkActive="active">
+                        <i class="fas fa-user"></i>
+                        {{ 'Profile' | translate }}
+                    </a>
+                    <a class="list-group-item" routerLink="company" routerLinkActive="active">
+                        <i class="fas fa-building"></i>
+                        {{ 'Company' | translate }}
+                    </a>
+                    <a class="list-group-item" href="#">
+                        <i class="fas fa-bell"></i>
+                        {{ 'Notifications' | translate }}
+                    </a>
+                    <a class="list-group-item" href="#">
+                        <i class="fas fa-shield-alt"></i>
+                        {{ 'Security' | translate }}
+                    </a>
+                    <a class="list-group-item" href="#">
+                        <i class="fas fa-database"></i>
+                        {{ 'Backup' | translate }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

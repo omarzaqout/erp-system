@@ -1,0 +1,79 @@
+@import '../../../../styles/theme-config';
+
+.preset-card {
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid $border !important;
+    background-color: $white;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border-color: $primary-blue !important;
+    }
+
+    &.active {
+        border-color: $primary-blue !important;
+        background-color: rgba(var(--primary-blue-rgb, 0, 112, 192), 0.05);
+    }
+
+    .color-preview {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+    }
+
+    span {
+        color: $text-dark;
+    }
+}
+
+.form-control-color {
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    background: none;
+}
+
+.card {
+    @include theme-card;
+
+    .card-header {
+        background-color: $white !important;
+        border-bottom: 1px solid $border;
+
+        h5 {
+            color: $primary-blue !important;
+        }
+    }
+}
+
+.bg-light {
+    background-color: rgba(var(--primary-blue-rgb, 0, 112, 192), 0.03) !important;
+    border: 1px solid $border !important;
+}
+
+label {
+    color: $text-dark;
+}
+
+.text-muted {
+    color: $text-light !important;
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,24 @@
+<div class="card recent-activity">
+    <div class="card-header">
+        <h5 class="mb-0">{{ title }}</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="activity-list">
+            <div class="activity-item" *ngFor="let activity of activities">
+                <div class="activity-icon" [ngClass]="'icon-' + activity.type">
+                    <i [class]="getIcon(activity.type)"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">{{ activity.title }}</div>
+                    <div class="activity-description">{{ activity.description }}</div>
+                    <div class="activity-meta">
+                        <span class="activity-time">{{ activity.timestamp | erpDate:'datetime' }}</span>
+                        <span class="activity-user" *ngIf="activity.user">
+                            by {{ activity.user }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
+import { CurrencyManagementService } from './currency-management.service';
 
 export interface Currency {
   code: string;
   symbol: string;
-  rate: number; // Rate relative to base currency (e.g., 1 USD = X SAR)
+  rate: number;
   isBase: boolean;
 }
 
@@ -18,66 +19,39 @@ export interface CurrencyConfig {
   providedIn: 'root'
 })
 export class CurrencyService {
-  private _config = new BehaviorSubject<CurrencyConfig>({
-    baseCurrency: 'USD',
-    useAutoRates: false,
-    currencies: [
-      { code: 'USD', symbol: '$', rate: 1, isBase: true },
-      { code: 'IQD', symbol: 'ع.د', rate: 1310, isBase: false },
-      { code: 'SAR', symbol: 'ر.س', rate: 3.75, isBase: false },
-      { code: 'EGP', symbol: 'ج.م', rate: 30.85, isBase: false },
-      { code: 'EUR', symbol: '€', rate: 0.92, isBase: false }
-    ]
-  });
+  constructor(private currencyManagement: CurrencyManagementService) {}
 
-  public config$ = this._config.asObservable();
+  public config$ = this.currencyManagement.currencies$.pipe(
+    map(currencies => ({
+      baseCurrency: this.currencyManagement.baseCurrency,
+      useAutoRates: false,
+      currencies: currencies.map(c => ({
+        code: c.CurrCode,
+        symbol: c.DocCurrCod,
+        rate: c.Rate,
+        isBase: c.CurrCode === this.currencyManagement.baseCurrency
+      }))
+    }))
+  );
+
   private _selectedCurrency = new BehaviorSubject<string>('USD');
   public selectedCurrency$ = this._selectedCurrency.asObservable();
 
-  constructor() {
-    this.loadConfig();
-    
-    // Simulate periodic auto-rate updates if enabled
-    setInterval(() => {
-        if (this._config.value.useAutoRates) {
-            this.fetchAutoRates();
-        }
-    }, 30000); // Every 30 seconds
-  }
-
-  private fetchAutoRates() {
-      const config = { ...this._config.value };
-      config.currencies.forEach(c => {
-          if (!c.isBase) {
-              const fluctuation = (Math.random() - 0.5) * 0.01;
-              c.rate = +(c.rate + fluctuation).toFixed(4);
-          }
-      });
-      this._config.next(config);
-  }
-
-  private loadConfig() {
-    const saved = localStorage.getItem('erp_currency_config');
-    if (saved) {
-      this._config.next(JSON.parse(saved));
-    }
-    const savedSelected = localStorage.getItem('erp_selected_currency');
-    if (savedSelected) {
-      this._selectedCurrency.next(savedSelected);
-    }
-  }
-
   get config(): CurrencyConfig {
-    return this._config.value;
+    return {
+      baseCurrency: this.currencyManagement.baseCurrency,
+      useAutoRates: false,
+      currencies: this.currencyManagement.getActiveCurrencies().map(c => ({
+        code: c.CurrCode,
+        symbol: c.DocCurrCod,
+        rate: c.Rate,
+        isBase: c.CurrCode === this.currencyManagement.baseCurrency
+      }))
+    };
   }
 
   get selectedCurrency(): string {
     return this._selectedCurrency.value;
-  }
-
-  updateConfig(newConfig: CurrencyConfig) {
-    this._config.next(newConfig);
-    localStorage.setItem('erp_currency_config', JSON.stringify(newConfig));
   }
 
   setSelectedCurrency(code: string) {
@@ -85,14 +59,19 @@ export class CurrencyService {
     localStorage.setItem('erp_selected_currency', code);
   }
 
+  updateConfig(newConfig: CurrencyConfig) {
+    // This is now managed by Financial module, but we can set base currency
+    this.currencyManagement.setBaseCurrency(newConfig.baseCurrency);
+  }
+
   getRate(code: string): number {
-    const currency = this._config.value.currencies.find(c => c.code === code);
-    return currency ? currency.rate : 1;
+    const currency = this.currencyManagement.getCurrency(code);
+    return currency ? currency.Rate : 1;
   }
 
   getSymbol(code: string): string {
-    const currency = this._config.value.currencies.find(c => c.code === code);
-    return currency ? currency.symbol : '$';
+    const currency = this.currencyManagement.getCurrency(code);
+    return currency ? currency.DocCurrCod : '$';
   }
 
   convert(amount: number, from: string, to: string): number {
@@ -107,8 +86,8 @@ export class CurrencyService {
   }
 
   getFormattedAmount(amount: number, currencyCode: string): string {
-    const currency = this._config.value.currencies.find(c => c.code === currencyCode);
+    const currency = this.currencyManagement.getCurrency(currencyCode);
     if (!currency) return amount.toFixed(2);
-    return `${currency.symbol}${amount.toFixed(2)}`;
+    return `${currency.DocCurrCod}${amount.toFixed(2)}`;
   }
 }

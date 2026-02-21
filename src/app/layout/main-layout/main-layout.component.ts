@@ -1,64 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ModuleService } from '../../core/services/module.service';
 
 @Component({
   selector: 'app-main-layout',
-  template: `
-    <div class="main-wrapper">
-      <app-sidebar></app-sidebar>
-      <div class="main-content">
-        <app-header></app-header>
-        <app-tabs-container></app-tabs-container>
-        <div class="content-area">
-          <router-outlet></router-outlet>
-        </div>
-        <app-footer></app-footer>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .main-wrapper {
-      display: flex;
-      min-height: 100vh;
-    }
-    
-    .main-content {
-      flex: 1;
-      margin-inline-start: var(--sidebar-width);
-      padding-top: var(--header-height);
-      transition: margin-inline-start 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-
-      :host-context([dir='rtl']) & {
-        margin-inline-start: var(--sidebar-width); // Re-assert logical property
-      }
-    }
-    
-    .content-area {
-      flex: 1;
-      padding: 1.5rem;
-      background-color: var(--background);
-    }
-    
-    @media (max-width: 991px) {
-      .main-content {
-        margin-left: var(--sidebar-collapsed);
-        [dir='rtl'] & {
-          margin-left: 0;
-          margin-right: var(--sidebar-collapsed);
-        }
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .main-content {
-        margin-left: 0;
-        [dir='rtl'] & {
-          margin-right: 0;
-        }
-      }
-    }
-  `]
+  templateUrl: './main-layout.component.html',
+  styleUrls: ['./main-layout.component.scss']
 })
-export class MainLayoutComponent { }
+export class MainLayoutComponent implements OnInit, OnDestroy {
+  showMobileMenu = false;
+  modules: any[] = [];
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private moduleService: ModuleService, 
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.moduleService.modules$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((mods: any[]) => {
+        this.modules = mods.filter(m => m.enabled);
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  toggleMobileMenu() {
+    this.showMobileMenu = !this.showMobileMenu;
+  }
+
+  toggleNotifications() {
+     // Trigger notification dropdown in header or simply navigate
+     this.router.navigate(['/notifications']);
+  }
+
+  closeSidebar() {
+    document.querySelector('.main-wrapper')?.classList.remove('sidebar-open');
+  }
+}

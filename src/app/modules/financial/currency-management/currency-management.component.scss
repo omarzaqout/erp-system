@@ -1,0 +1,99 @@
+@import '../../../../styles/theme-config';
+
+.currency-management-container {
+    padding: 1.5rem;
+    background: $app-background;
+    min-height: calc(100vh - 100px);
+}
+
+.page-header {
+    h3 {
+        font-weight: 700;
+        color: $text-dark;
+    }
+}
+
+.nav-tabs {
+    border-bottom: 2px solid $border;
+
+    .nav-link {
+        border: none;
+        color: $text-light;
+        font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+            color: $primary-blue;
+            background: rgba(var(--primary-blue-rgb, 0, 112, 192), 0.05);
+        }
+
+        &.active {
+            color: $primary-blue;
+            border-bottom: 3px solid $primary-blue;
+            background: transparent;
+        }
+    }
+}
+
+.table {
+    thead {
+        th {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: $text-dark;
+            border-bottom: 2px solid $border;
+            background-color: $table-header-bg;
+        }
+    }
+
+    tbody {
+        tr {
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: rgba(var(--primary-blue-rgb, 0, 112, 192), 0.03);
+                transform: translateX(2px);
+            }
+        }
+
+        td {
+            vertical-align: middle;
+            padding: 1rem 0.75rem;
+            color: $text-dark;
+        }
+    }
+}
+
+.font-monospace {
+    font-family: 'Courier New', monospace;
+    color: $text-dark;
+}
+
+.list-group-item {
+    transition: all 0.2s ease;
+    background-color: $white;
+    color: $text-dark;
+    border-color: $border;
+
+    &.active {
+        background: linear-gradient(135deg, $primary-blue 0%, $dark-blue 100%);
+        border-color: $primary-blue;
+        color: white; // Fixed white for contrast on dark primary
+    }
+
+    &:hover:not(.active) {
+        background: rgba(var(--primary-blue-rgb, 0, 112, 192), 0.05);
+        transform: translateX(3px);
+        color: $primary-blue;
+    }
+}
+
+.alert-info {
+    background: rgba(var(--primary-blue-rgb, 0, 112, 192), 0.1);
+    border: none;
+    border-left: 4px solid $primary-blue;
+    color: $text-dark;
+}

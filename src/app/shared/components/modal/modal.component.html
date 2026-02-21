@@ -1,0 +1,38 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="onBackdropClick()">
+    <div class="modal-container" [class]="'modal-' + getSize()" [class.modal-form-mode]="mode === 'form'"
+        (click)="$event.stopPropagation()">
+
+        <!-- Standard Modal Mode -->
+        <ng-container *ngIf="mode === 'standard'">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ config?.title || 'Modal' }}</h5>
+                <button *ngIf="config?.showClose !== false" type="button" class="btn-close" (click)="close()"
+                    aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <ng-container *ngIf="config?.body; else defaultBody">
+                    <div [innerHTML]="config?.body || ''"></div>
+                </ng-container>
+                <ng-template #defaultBody>
+                    <ng-content></ng-content>
+                </ng-template>
+            </div>
+
+            <div class="modal-footer" *ngIf="config && config.buttons && config.buttons.length > 0">
+                <button *ngFor="let button of config.buttons" type="button" class="btn"
+                    [class]="button.class || 'btn-secondary'" (click)="onButtonClick(button)">
+                    {{ button.label }}
+                </button>
+            </div>
+        </ng-container>
+
+        <!-- Form Modal Mode -->
+        <app-modal-form *ngIf="mode === 'form' && formConfig" [config]="formConfig" (formSubmit)="onFormSubmit($event)"
+            (formCancel)="onFormCancel()">
+        </app-modal-form>
+
+    </div>
+</div>

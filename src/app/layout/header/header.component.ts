@@ -42,8 +42,12 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleSidebar() {
-    // Emit event to sidebar component
-    document.querySelector('.sidebar')?.classList.toggle('show');
+    const wrapper = document.querySelector('.main-wrapper');
+    if (window.innerWidth <= 768) {
+      wrapper?.classList.toggle('sidebar-open');
+    } else {
+      wrapper?.classList.toggle('sidebar-collapsed');
+    }
   }
 
   toggleSearch() {

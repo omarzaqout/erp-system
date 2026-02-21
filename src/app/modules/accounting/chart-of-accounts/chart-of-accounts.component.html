@@ -13,11 +13,11 @@
     <!-- Chart of Accounts Content (Tree Structure) -->
     <div class="coa-content shadow-sm">
         <div class="card border-0">
-            <div class="card-header bg-white py-3">
+            <div class="card-header py-3">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="header-info">
-                        <h5 class="mb-0 fw-bold text-primary">{{ getActiveDrawerName() | translate }}</h5>
-                        <small class="text-muted">{{ 'OACT - G/L Accounts Table (SAP Logic)' | translate }}</small>
+                        <h5 class="mb-0 fw-bold">{{ getActiveDrawerName() | translate }}</h5>
+                        <small>{{ 'OACT - G/L Accounts Table (SAP Logic)' | translate }}</small>
                     </div>
                     <div class="header-actions">
                         <button class="btn btn-outline-success btn-sm me-2" (click)="exportToCSV()">
@@ -32,15 +32,15 @@
                 <!-- Search Bar -->
                 <div class="search-bar-wrapper">
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i class="fas fa-search text-muted"></i>
+                        <span class="input-group-text border-end-0">
+                            <i class="fas fa-search"></i>
                         </span>
                         <input type="text" class="form-control border-start-0 ps-0"
                             [placeholder]="'Search by account name or code...' | translate"
                             (input)="onSearchChange($any($event.target).value)">
                     </div>
                     <div class="search-results-info mt-1" *ngIf="searchTerm">
-                        <small class="text-primary italic">
+                        <small class="italic">
                             <i class="fas fa-info-circle me-1"></i>
                             Showing branches matching "{{ searchTerm }}"
                         </small>

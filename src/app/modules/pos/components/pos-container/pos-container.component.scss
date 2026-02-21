@@ -1,5 +1,86 @@
+@import '../../../../styles/theme-config';
+
 :host {
   display: block;
   height: 100vh;
   overflow: hidden;
+  background-color: $app-background;
+}
+
+.pos-header {
+  background-color: $white !important;
+  border-bottom: 1px solid $border !important;
+  min-height: 60px;
+
+  .text-primary {
+    color: $primary-blue !important;
+  }
+
+  .text-muted {
+    color: $text-light !important;
+  }
+
+  .badge.bg-light {
+    background-color: $table-header-bg !important;
+    color: $text-dark !important;
+    border-color: $border !important;
+  }
+}
+
+.pos-mobile-nav {
+  height: 60px;
+
+  .btn {
+    font-weight: 600;
+    transition: all 0.2s;
+
+    &.btn-primary {
+      background-color: var(--primary-blue) !important;
+      border-color: var(--primary-blue) !important;
+    }
+  }
+}
+
+.pos-content {
+  height: calc(100vh - 120px); // Header + Mobile Nav
+
+  @media (min-width: 768px) {
+    height: calc(100vh - 70px); // Header only
+  }
+
+  .bg-light {
+    background-color: $app-background !important;
+  }
+
+  .bg-white {
+    background-color: $white !important;
+  }
+
+  .border-end {
+    border-right: 1px solid $border !important;
+  }
+}
+
+.currency-switcher {
+  .form-select.bg-light {
+    background-color: $table-header-bg !important;
+    color: $text-dark !important;
+    border: 1px solid $border !important;
+    padding-right: 2rem !important;
+  }
+}
+
+.icon-circle.bg-primary {
+  background-color: rgba(var(--primary-blue-rgb), 0.1) !important;
+  color: $primary-blue !important;
+}
+
+.card {
+  @include theme-card;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.z-report-overlay {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 1rem;
 }

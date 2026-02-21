@@ -10,6 +10,7 @@ interface MenuItem {
   icon: string;
   route: string;
   badge?: number;
+  queryParams?: any;
   children?: MenuItem[];
 }
 
@@ -81,6 +82,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
               item.children = [
                 { label: 'Employees', icon: 'fas fa-users-cog', route: '/hr/employees' }
               ];
+            } else if (m.id === 'financial') {
+              item.children = [
+                { label: 'Currencies (OCRN)', icon: 'fas fa-money-bill-wave', route: '/financial/currencies', queryParams: { tab: 'currencies' } },
+                { label: 'Exchange Rates (ORTT)', icon: 'fas fa-chart-line', route: '/financial/currencies', queryParams: { tab: 'rates' } }
+              ];
             }
 
             return item;
@@ -121,6 +127,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
 
+  onLinkClick() {
+    if (window.innerWidth <= 768) {
+      document.querySelector('.main-wrapper')?.classList.remove('sidebar-open');
+    }
+  }
+
   isExpanded(item: MenuItem): boolean {
     return this.expandedItems.has(item.label);
   }
@@ -138,6 +150,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
+    
+    // Sync with wrapper for layout adjustment
+    if (window.innerWidth > 768) {
+      const wrapper = document.querySelector('.main-wrapper');
+      if (this.isCollapsed) {
+        wrapper?.classList.add('sidebar-collapsed');
+      } else {
+        wrapper?.classList.remove('sidebar-collapsed');
+      }
+    }
   }
 
   logout() {
