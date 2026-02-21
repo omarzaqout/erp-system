@@ -28,6 +28,8 @@ import { FormPageComponent } from './components/form-page/form-page.component';
 import { TabComponent } from './components/tabs/tab/tab.component';
 import { TabsContainerComponent } from './components/tabs/tabs-container/tabs-container.component';
 
+import { PageWrapperComponent } from './components/page-wrapper/page-wrapper.component';
+
 @NgModule({
   declarations: [
     // Pipes
@@ -51,7 +53,8 @@ import { TabsContainerComponent } from './components/tabs/tabs-container/tabs-co
     ModalFormComponent,
     FormPageComponent,
     TabComponent,
-    TabsContainerComponent
+    TabsContainerComponent,
+    PageWrapperComponent
   ],
   imports: [
     CommonModule,
@@ -82,6 +85,7 @@ import { TabsContainerComponent } from './components/tabs/tabs-container/tabs-co
     FormPageComponent,
     TabComponent,
     TabsContainerComponent,
+    PageWrapperComponent,
     // Modules
     CommonModule,
     FormsModule,

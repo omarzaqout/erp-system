@@ -1,25 +1,14 @@
-<div class="dashboard">
-    <!-- Page Header -->
-    <div class="page-header">
-        <div>
-            <h1>{{ 'Dashboard' | translate }}</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item active">{{ 'Home' | translate }}</li>
-                </ol>
-            </nav>
-        </div>
-        <div class="page-actions">
-            <button class="btn btn-outline-primary me-2">
-                <i class="fas fa-download"></i>
-                {{ 'Export' | translate }}
-            </button>
-            <button class="btn btn-primary">
-                <i class="fas fa-plus"></i>
-                {{ 'New Order' | translate }}
-            </button>
-        </div>
-    </div>
+<app-page-wrapper pageTitle="Dashboard">
+    <ng-container header-actions>
+        <button class="btn btn-outline-primary me-2">
+            <i class="fas fa-download"></i>
+            {{ 'Export' | translate }}
+        </button>
+        <button class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            {{ 'New Order' | translate }}
+        </button>
+    </ng-container>
 
     <!-- Stats Cards -->
     <div class="row g-4 mb-4">
@@ -115,4 +104,4 @@
             </div>
         </div>
     </div>
-</div>
+</app-page-wrapper>

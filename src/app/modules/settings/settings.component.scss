@@ -1,43 +1,7 @@
-@import 'styles/theme-config';
+@import '../../../styles/theme-config';
 
 .settings-page {
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid $border;
-
-        h1 {
-            font-size: 1.75rem;
-            margin-bottom: 0.25rem;
-            color: $text-dark;
-        }
-
-        .breadcrumb {
-            margin-bottom: 0;
-            background: transparent;
-            padding: 0;
-
-            .breadcrumb-item {
-                color: $text-light;
-
-                &.active {
-                    color: $text-dark;
-                }
-
-                a {
-                    color: $primary-blue;
-                    text-decoration: none;
-
-                    &:hover {
-                        color: $dark-blue;
-                    }
-                }
-            }
-        }
-    }
+    // page-header handled by PageWrapperComponent
 
     .card {
         @include theme-card;

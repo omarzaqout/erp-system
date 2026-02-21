@@ -1,38 +1,7 @@
 @import '../../../styles/theme-config';
 
 .dashboard {
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid $border;
-        flex-wrap: wrap;
-        gap: 1rem;
-
-        @media (max-width: 576px) {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        h1 {
-            font-size: 1.75rem;
-            margin-bottom: 0.25rem;
-            color: $text-dark;
-        }
-
-        .breadcrumb {
-            margin-bottom: 0;
-            background: transparent;
-            padding: 0;
-        }
-    }
-
-    .page-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
+    // page header handled by PageWrapperComponent
 
     .revenue-chart {
         height: 300px;
