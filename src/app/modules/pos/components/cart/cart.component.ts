@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
 import { Observable, combineLatest, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PosService, CartItem, Product } from '../../services/pos.service';
-import { AccountingService, JournalEntry } from '../../../../modules/accounting/services/accounting.service';
 import { InventoryService } from '../../../../modules/inventory/services/inventory.service';
 import { PosSessionService } from '../../services/pos-session.service';
 import { CurrencyService } from '../../../../core/services/currency.service';
 import { CustomerService } from '../../../../modules/crm/services/customer.service';
 import { Customer } from '../../../../core/services/mock-data.service';
 import { TaxService } from '../../../../core/services/tax.service';
+import { EventBusService } from '../../../../core/events/event-bus.service';
 
 @Component({
   selector: 'app-cart',
@@ -21,7 +22,7 @@ export class CartComponent implements OnInit {
   taxAmount$: Observable<number>;
   total$: Observable<number>;
   
-  // Tax & Discount States
+  // Tax & Discount States`
   discountPercentage: number = 0;
   isWholesale: boolean = false;
   
@@ -39,12 +40,12 @@ export class CartComponent implements OnInit {
 
   constructor(
     private posService: PosService,
-    private accountingService: AccountingService,
     private inventoryService: InventoryService,
     private sessionService: PosSessionService,
     private currencyService: CurrencyService,
     private customerService: CustomerService,
-    private taxService: TaxService
+    private taxService: TaxService,
+    private eventBus: EventBusService
   ) {
     this.cart$ = this.posService.cart$;
     
@@ -154,21 +155,13 @@ export class CartComponent implements OnInit {
           this.inventoryService.updateStock(item.product.id, 1);
           this.sessionService.recordReturn(price + tax, tax);
           
-          // Add accounting entry for refund
-          const entry: JournalEntry = {
-              id: 'REF-' + Math.random().toString(36).substr(2, 5),
-              date: new Date(),
-              reference: 'POS Refund',
-              memo: `Refund: ${item.product.name}`,
-              status: 'Posted',
-              totalAmount: price + tax,
-              lines: [
-                  { accountId: '2', debit: 0, credit: price + tax, description: 'Cash Refund' },
-                  { accountId: '8', debit: price, credit: 0, description: 'Sales Reversal' },
-                  { accountId: '7', debit: tax, credit: 0, description: 'Tax Reversal' }
-              ]
-          };
-          this.accountingService.addJournalEntry(entry);
+          // Emit refund event to EventBus
+          this.eventBus.emit({
+               type: 'POS_REFUND_COMPLETED',
+               payload: { orderId: 'REF-' + Math.random().toString(36).substr(2, 5), totalAmount: price + tax, tax: tax, subtotal: price, items: [item] },
+               timestamp: new Date()
+          });
+          
           this.removeItem(item);
           alert('Item refunded and stock updated.');
       }
@@ -201,20 +194,21 @@ export class CartComponent implements OnInit {
       this.inventoryService.updateStock(item.product.id, -item.quantity);
     });
 
-    // 2. Journal Entry
-    const paymentAccountId = this.selectedPaymentMethod === 'cash' ? '2' : '3';
-    const netSalesBase = subtotalBase - discountAmountBase;
-    const entry: JournalEntry = {
-      id: orderId, date: orderDate, reference: 'POS Sale',
-      memo: `Sale to ${this.selectedCustomer?.name || 'Walk-in'} (Disc: ${this.discountPercentage}%)`,
-      status: 'Posted', totalAmount: totalValueBase,
-      lines: [
-        { accountId: paymentAccountId, debit: totalValueBase, credit: 0, description: 'Payment' },
-        { accountId: '8', debit: 0, credit: netSalesBase, description: 'Sales Revenue' },
-        { accountId: '7', debit: 0, credit: taxAmountBase, description: 'Tax collected' }
-      ]
-    };
-    this.accountingService.addJournalEntry(entry);
+    // 2. Dispatch Domain Event for Accounting & Analytics
+    this.eventBus.emit({
+        type: 'POS_ORDER_COMPLETED',
+        payload: {
+            orderId: orderId,
+            orderDate: orderDate,
+            total: totalValueBase,
+            subtotal: subtotalBase - discountAmountBase,
+            tax: taxAmountBase,
+            items: currentCart,
+            paymentMethod: this.selectedPaymentMethod,
+            customer: this.selectedCustomer
+        },
+        timestamp: new Date()
+    });
     
     // 3. Session Stats Update
     this.sessionService.updateSessionStats(totalValueBase, this.selectedPaymentMethod, taxAmountBase, discountAmountBase, currentCart);
@@ -238,9 +232,24 @@ export class CartComponent implements OnInit {
     this.clearCustomer();
     this.discountPercentage = 0;
     
-    setTimeout(() => {
-        if (confirm(`Payment successful: ${symbol}${totalLocal.toFixed(2)}. Print receipt?`)) this.print();
-    }, 100);
+    Swal.fire({
+      title: 'Success!',
+      text: `Payment of ${symbol}${totalLocal.toFixed(2)} was completed successfully.`,
+      icon: 'success',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: '<i class="fas fa-print"></i> Print Receipt',
+      cancelButtonText: 'Next Customer',
+      toast: true,
+      position: 'top-end',
+      timer: 4000,
+      timerProgressBar: true
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.print();
+      }
+    });
   }
 
   print() {

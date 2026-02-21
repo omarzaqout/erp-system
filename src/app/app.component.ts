@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ThemeService } from './core/services/theme.service';
+import { AccountingEngineService } from './core/services/accounting-engine.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +9,10 @@ import { ThemeService } from './core/services/theme.service';
 export class AppComponent {
   title = 'ERP System';
   
-  constructor(private themeService: ThemeService) {}
+  constructor(
+    private themeService: ThemeService,
+    private accountingEngine: AccountingEngineService
+  ) {
+    this.accountingEngine.init();
+  }
 }
